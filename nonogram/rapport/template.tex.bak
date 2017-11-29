@@ -1,0 +1,683 @@
+\documentclass[a4paper]{memoir}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=3cm]{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage{graphicx}
+\usepackage{parskip}
+\usepackage{pgf}
+\usepackage{qtree}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{color}
+\usetikzlibrary{arrows, automata, positioning}
+\usepackage{lstautogobble}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage[]{algorithm2e}
+
+
+%%% Définition de la page de garde %%%
+%% J'ai trouvé cet exemple à cette adresse :
+%% http://mirror.jmu.edu/pub/CTAN/info/latex-samples/TitlePages/titlepages.pdf
+%% Tous mes remerciements vont donc à l'auteur du code de cette page, Peter Wilson
+\newlength{\drop}% for my convenience
+\newcommand*{\titleM}{\begingroup % Misericords, T&H p 153
+\drop = 0.08\textheight
+\centering
+\vspace*{\drop}
+{\Huge\bfseries Mini-Projet d'algorithmique}\\[\baselineskip]
+{\large\scshape Analyse de séquences en bioinformatique}\\[\baselineskip]
+{\large\scshape 3I003}\\[\baselineskip]
+\begin{vplace}[0.7]
+\textit{
+Compte-rendu du projet
+}
+\end{vplace}
+
+{\scshape Réalisé par\\ BIZZOZZ\'ERO Nicolas\\ et\\ RENAUX Demir}\par
+\vspace*{2\drop}
+\endgroup}
+%%% Fin de la définition de la page de garde %%%
+
+%%% Définition de la numérotation des pages %%%
+\let\footruleskip\undefined
+\usepackage{fancyhdr} 
+\fancyhf{}
+\cfoot{\thepage}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+%%% Fin de la définition de la numérotation des pages %%%
+
+%%% Définition de la numérotation des sections %%%
+\setcounter{secnumdepth}{50}
+\setcounter{tocdepth}{50}
+\renewcommand{\thesection}{}
+\renewcommand{\thesubsection}{}
+\renewcommand{\thesubsubsection}{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}
+%%% Fin de la définition de la numérotation des sections %%%
+
+\newenvironment{mapreuve}[1][\proofname]{\proof[#1]\mbox{}\\*}{\endproof}
+%%% Fin de la définition des noms d'objets utilisés %%%
+
+%%% On Définie l'indentation par défaut à 0
+\setlength{\parindent}{0cm}
+
+
+\begin{document}
+	%%% Page de garde %%%
+	\begin{center}
+	\titleM	
+	\end{center}
+	\clearpage
+	
+	\begin{center}
+	\tableofcontents
+	\end{center}
+	
+	\newpage
+	\section{Partie 1}
+	\subsection{Question 1.1}
+	On voudrait calculer le nombre alignements possibles pour deux séquences de même taille $d$.\\Tout d'abord, les alignements d'une séquence de longueur $d$ ont tous un nombre de paires $k$ tel que $k < d$. Les caractères n'apparaissant pas dans un alignement (au nombre de $d-k$ caractères) sont en correspondance avec des gap.
+
+Le nombre d'alignements à $k$ paires pour des séquences $X$ et $Y$ de longueur $d$ est: $\binom{d}{k}^2$.\\ En effet, on peut trouver tous les alignements à $k$ paires en choisissant $k$ éléments parmi les $d$ de la séquence $X$, puis en les mettant par paires avec $k$ éléments parmi les $d$ de $Y$. De plus, on ne souhaite pas avoir de croisements dans les alignements.\\Donc, pour des séquences de $d$ caractères, il existe: $\sum\limits_{k=0}^{d} \binom{d}{k}^2$ alignements, puisqu'on peut avoir des alignements ayant des nombres de paires allant de $0$ à $d$.
+
+Soit l'algorithme qui parcourt la liste des alignements possibles des séquences $X$ et $Y$ de longueurs $d$, en calculant le coût de chaque alignement et et gardant l'alignement de coût minimal. Si l'on suppose que le calcul du coût d'un alignement de $l$ paires est en $\Theta(l)$, alors la complexité de l'algorithme est en $\Theta(\sum\limits_{k=0}^{d}( l\times\binom{d}{k}^2))$.
+
+	\subsection{Question 1.2}
+	Soient deux séquences $X = (x_1, ...\,, x_m)$ et $Y = (y_1, ...\,, y_n)$.\\
+	Soit $M$ un alignement de $X$ et $Y$.\\
+	Montrons que si $(x_m,\,y_n) \not\in M$, alors $x_m$ n'apparait pas dans $M$ ou $y_n$ n'apparait pas dans $M$.
+	\begin{mapreuve}
+	Par l'absurde, supposons que $(x_m,\,y_n) \not\in M$ et que $x_m$ et $y_n$ apparaissent dans $M$.\\
+	Alors il existe $y_{k_1}$ et $x_{k_2}$ tels que $(x_m,\,y_{k_1}) \in M$ et $(x_{k_2},\,y_n) \in M$.\\
+	$m$ est le plus grand indice de $X$, donc $k_2 < m$ (1).\\
+	$n$ est le plus grand indice de $Y$, donc\thinspace\thinspace\thinspace\thinspace $k_1 < n$ \thinspace\thinspace (2).\\
+	Or, d'après la partie 2 de l'énoncé, on déduit de la règle interdisant les croisements entre couples de paires la formule suivante :
+	\begin{equation}
+		((x_i,\,y_j) \in M) \wedge ((x_{i^\prime},\,y_{j^\prime}) \in M)) \wedge (i < i^\prime) \Rightarrow j < j^\prime
+		\nonumber
+	\end{equation}
+	D'après nos hypothèses, la condition $(k_2 < m)$ est vérifiée (voir (1)), mais pas la condition $(n < k_1)$ (voir (2)), il y a donc un croisement entre le couple $(x_m,\,y_{k_1})$ et $(x_{k_2},\,y_n)$, ce qui est absurde car il appartient à l'alignement $M$.\\
+	\end{mapreuve}
+	Par l'absurde, nous venons de montrer que si $(x_m,\,y_n) \not\in M$, alors $x_m$ n'apparait pas dans $M$ ou $y_n$ n'apparait pas dans $M$.
+	\subsection{Question 1.3}
+	Soient deux séquences $X = (x_1, ...\,, x_m)$ et $Y = (y_1, ...\,, y_n)$.\\
+	Soit $M$ un alignement de $X$ et $Y$.\\
+	Les trois cas de figure à considérer pour $x_m$ et $y_n$ sont les suivants :
+	\begin{itemize}
+	\renewcommand{\labelitemi}{-} % Remplace les tirets moches de la liste par des tirets plus jolis
+	\item Cas A \thinspace : $(x_m,\,y_n) \in M$.
+	\end{itemize}
+	Si le cas A n'est pas vérifié, on a donc $(x_m,\,y_n) \not\in M$, ce qui nous amène aux deux cas vus dans l'exercice précédent :
+	\begin{itemize}
+	\renewcommand{\labelitemi}{-} % Remplace les tirets moches de la liste par des tirets plus jolis
+	\item Cas B1 : $x_m$ apparait dans $M$, et donc $y_n$ n'apparait pas dans $M$.
+	\item Cas B2 : $y_n$ apparait dans $M$, et donc $x_m$ n'apparait pas dans $M$.
+	\end{itemize}		
+	\subsection{Question 1.4}
+	\begin{itemize}
+	\renewcommand{\labelitemi}{-} % Remplace les tirets moches de la liste par des tirets plus jolis
+	\item Cas A \thinspace : $F(m,\,n) = F(m-1,\,n-1) + \delta_{x_m,\,y_n}$.
+	\item Cas B1 : $F(m,\,n) = F(m,\,n-1) + \delta_{gap}$.
+	\item Cas B2 : $F(m,\,n) = F(m-1,\,n) + \delta_{gap}$.
+	\end{itemize}	
+	
+	\subsection{Question 1.5}
+	Soient $i \geq 1$ et $j \geq 1$ :
+	\begin{equation}
+F(i,\,j) = \left\{
+    \begin{array}{l l}
+        F(i-1,\,j-1) + \delta_{x_i,\,y_j} & si\ (x_i,\,y_j) \in M\\
+        F(i,\,j-1) + \delta_{gap} & si\ x_i\ apparait\ dans\ M\\
+        F(i-1,\,j) + \delta_{gap} & si\ y_j\ apparait\ dans\ M
+    \end{array}
+\right.\nonumber
+	\end{equation}
+	
+	\subsection{Question 1.6}
+	$F(i,\,0)$ est le coût minimal pour l'alignement de la séquence $X = (x_{1}, ..., x_{i})$ et la séquence sans élément. 
+	Le seul alignement possible est l'alignement vide, puisqu'on ne peut former aucune paire de caractères. Chaque caractère de $X$ sera alors en correspondance avec un gap.\\
+	On applique la formule du coût d'un alignement:
+	$$f(M) = \sum_{(x_{i}, y_{j})\in M}\delta_{x_{i}y_{j}} + \sum_{x_{i}\not\in M} \delta_{gap} + \sum_{y_{j}\not\in M}\delta_{gap}$$
+	Donc, puisqu'il existe un seul alignement, il est minimal:
+	$$F(i,\,0) = f(\emptyset) = \sum_{x_{i}\not\in M} \delta_{gap} = i\delta_{gap}$$
+	
+	De même, si $X$ contient $0$ éléments et $Y$ en contient $j$, alors l'alignement est vide, il est unique, et on a: 
+	$$F(0,\,j) = f(\emptyset) = \sum_{y_{j}\not\in M} \delta_{gap} = j\delta_{gap}$$
+	
+	Nous avons montré que $F(i,0) = i\delta_{gap}$ pour tout $i \in\lbrace 1, ..., m\rbrace$ et $F(0, j) = j\delta_{gap}$ pour tout $j \in\lbrace 1, ..., n\rbrace$.
+	\subsection{Question 1.7}
+	Cet algorithme a pour complexité $\Theta(m \times n)$ en temps et en espace.
+	
+
+	\IncMargin{1em}
+	\begin{algorithm}[H]
+	%%%Variables
+	\SetKwData{VarA}{v1}\SetKwData{VarB}{v2}\SetKwData{VarC}{v3}
+	%%%Fonctions
+	\SetKwFunction{Minimum}{min}
+	%%%Bull****
+	\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+	
+	\Input{Séquences $X$ et $Y$, de longueurs $m$ et $n$ respectivement}
+	\Output{$F(m, n)$}
+	\BlankLine
+	F[$m$][$n$] tableau vide;
+	\tcp{Initialiser la première ligne et colonne}
+	 \For{$k$ de $0$ à $m$}{F[$k$][$0$] $\leftarrow k\delta _{gap}$}
+	 \For{$k$ de $0$ à $n$}{F[$0$][$k$] $\leftarrow k\delta _{gap}$}
+	\BlankLine
+	\tcp{Calculer les valeurs restantes de F}
+	\For{$i\leftarrow 1$ \KwTo $m$}{
+	  \For{$j\leftarrow 1$ \KwTo $n$}{
+	    \VarA$\leftarrow$ F[$i-1$][$j-1$] $+ \delta _{x_{i}y_{j}}$\;
+	    \VarB$\leftarrow$ F[$i$][$j-1$] $+ \delta _{gap}$\;
+	    \VarC$\leftarrow$ F[$i-1$][$j$] $+ \delta _{gap}$\;
+	    F[$i$][$j$] $\leftarrow$ \Minimum{\VarA, \VarB, \VarC}\;
+	 }
+	}
+	\KwRet F[$m$][$n$]
+	\caption{COUT1}
+	\end{algorithm}\DecMargin{1em}
+
+	\subsection{Question 1.8}
+	On suppose qu'on dispose des valeurs des coûts $F(i,\,j)$ dans F[$i$][$j$].\\
+	L'algorithme proposé SOL1 est le suivant :
+	
+	\IncMargin{1em}
+	\begin{algorithm}[H]
+	%%%Variables
+	\SetKwData{VarA}{v1}\SetKwData{VarB}{v2}\SetKwData{VarC}{v3}\SetKwData{Alignement}{M}\SetKwData{Min}{minimum}\SetKwData{indi}{i}\SetKwData{indj}{j}\SetKwData{seqX}{X}\SetKwData{seqY}{Y}
+	%%%Fonctions
+	\SetKwFunction{Minimum}{min}
+	%%%Bull****
+	\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+	%%%Algorithme
+	\Input{Séquences \seqX et \seqY, de longueurs $m$ et $n$ respectivement, et F[][] généré par l'algorithme COUT1}
+	\Output{Un alignement optimal des séquences \seqX, \seqY}
+	\BlankLine
+	Initialiser \Alignement un alignement de séquences vide\;
+	\indi $\leftarrow m$\;
+	\indj $\leftarrow n$\;
+	\BlankLine
+	\While{\indi $\neq 0$ et \indj $\neq 0$}{
+		\VarA$\leftarrow$ F[$i-1$][$j-1$] $+ \delta _{x_{i}y_{j}}$\;
+	    \VarB$\leftarrow$ F[$i$][$j-1$] $+ \delta _{gap}$\;
+	    \VarC$\leftarrow$ F[$i-1$][$j$] $+ \delta _{gap}$\;
+		\Min$\leftarrow$\Minimum{\VarA, \VarB, \VarC}\;
+		Ajouter le couple $(\seqX [i], \seqY [j])$ à \Alignement\;
+		\uIf{\Min = \VarA}{
+			\indi $\leftarrow$ \indi $ - 1$\;\indj $\leftarrow$ \indj $ - 1$\;
+		}
+		\uElseIf{\Min = \VarB}{
+			\indj $\leftarrow$ \indj $ - 1$\;	
+		}
+		\Else{\indi $\leftarrow$ \indi $ - 1$\;}
+	}
+	\# Gaps initiaux\\
+	\While{\indi $\neq 0$}{
+		Ajouter le couple $(\seqX [i], \seqY [j])$ à \Alignement\;
+		\indi $\leftarrow$ \indi $ - 1$\;
+	}
+	\While{\indj $\neq 0$}{
+		Ajouter le couple $(\seqX [i], \seqY [j])$ à \Alignement\;
+		\indj $\leftarrow$ \indj $ - 1$\;
+	}
+	\KwRet \Alignement
+	\caption{SOL1}
+	\end{algorithm}\DecMargin{1em}
+	
+	Sa complexité temps est en $\Theta(n + m)$ et sa complexité espace est en $\Theta(n \times m)$. 
+	
+	La complexité globale de cette approche est $\Theta(n \times m)$ en temps et $\Theta(n \times m)$ en espace.
+	
+	\clearpage
+	\section{Partie 2}
+	\subsection{Question 2.1}
+		% \includegraphics[width=\linewidth]{Question21reponse.PNG}
+	
+	\subsection{Question 2.2 (facultative)}
+	Soit $P(k)$ la propriété "Pour tout couple $(i,\,j)$ tel que $i \in \lbrace 0, \cdots , m \rbrace$ et $j \in \lbrace 0 ,\cdots , n \rbrace$ et tel que $k = i+j$, on a $F(i, j) = g(i, j)$". Montrons-la par récurrence forte pour tout $k \in \mathbb{N}$.
+	\begin{mapreuve}
+	
+	\underline{Cas de base}: Posons $k = 0$.\\
+	Alors $i = 0$ et $j = 0$, alors les séquences sont vides. De manière triviale, on trouve $F(0,0) = g(0,0)$. $P(0)$ est donc vérifiée.
+	
+	\vspace{5mm}
+	
+	\underline{Induction}: Supposons qu'il existe $k$ tel que pour tout entier $k^\prime \leq k$, on ait $P(k^\prime)$. Montrons $P(k+1)$.\\
+	
+	On pose $F(0, 0) = 0$. Pour $i > 0$ et $j > 0$, et $M$ un alignement optimal, $F(i, j)$ vaut:
+	\begin{equation}
+F(i,\,j) = min \left\{
+    \begin{array}{l l}
+        F(i-1,\,j-1) + \delta_{x_i,\,y_j} & si\ (x_i,\,y_j) \in M\\
+        F(i,\,j-1) + \delta_{gap} & si\ x_i\ apparait\ dans\ M\\
+        F(i-1,\,j) + \delta_{gap} & si\ y_j\ apparait\ dans\ M
+    \end{array}
+\right.\nonumber
+	\end{equation}
+	
+	Le sommet $x_{i}y_{j}$ du graphe tel que $i > 0$ et $j > 0$ est accessible uniquement depuis les sommets $x_{i-1}y_{j-1}$, $x_{i-1}y_{j}$ et $x_{i}y_{j-1}$ en empruntant une arête de coût $\delta_{x_i,\,y_j}$, $\delta_{gap}$ et $\delta_{gap}$ respectivement. Ainsi le coût d'un plus court chemin de $(0,0)$ à $(i, j)$ est le minimum parmi:	
+	
+	\begin{equation}
+g(i,\,j) = min \left\{
+    \begin{array}{l l}
+        g(i-1,\,j-1) + \delta_{x_i,\,y_j} & si\ (x_i,\,y_j) \in M\\
+        g(i,\,j-1) + \delta_{gap} & si\ x_i\ apparait\ dans\ M\\
+        g(i-1,\,j) + \delta_{gap} & si\ y_j\ apparait\ dans\ M
+    \end{array}
+\right.\nonumber
+	\end{equation}
+	
+	D'après l'hypothèse de récurrence, on peut remplacer les expressions en $g()$ par des expressions en $F()$ dans la formule précédente. On a donc montré pour $i + j = n$ que $F(i, j) = g(i, j)$.
+	
+	\vspace{5mm}
+	
+	\underline{Conclusion}: La propriété étant héréditaire et vérifiée au rang $0$, on a montré $P(k)$ pour tout $k$.\\
+	\end{mapreuve}	
+	Donc par définition des fonctions $F$ et $g$, on en déduit que le coût d'un alignement optimal des séquences $X$ et $Y$ correspond à la longueur d'un plus court chemin entre les sommets $(0,\,0)$ et $(m,\,n)$ dans $G_{XY}$.
+	
+	\subsection{Question 2.3}
+	Ce graphe possède de l'ordre de $nm$ arêtes et $nm$ sommets. De plus, il ne contient pas de circuit. On peut donc calculer les plus courts chemins de $(0,0)$ à $(m,n)$ en $\Theta(\vert S\vert + \vert A\vert)$, c'est-à-dire en $\Theta(m\times n)$ en utilisant l'algorithme de Bellman.
+		
+	\vspace{5mm}
+		
+	On trouve à la main deux plus courts chemins, de coût 4:
+	\begin{itemize}
+	\renewcommand{\labelitemi}{-} % Remplace les tirets moches de la liste par des tirets plus jolis
+	\item $x_{0}y_{0} \xrightarrow{\delta_{gap}} x_{0}y_{1} \xrightarrow{0} x_{1}y_{2} \xrightarrow{0} x_{2}y_{3} \xrightarrow{\delta_{gap}} x_{3}y_{3} \xrightarrow{0} x_{4}y_{4}$ 
+	
+	$M = \lbrace (x_1, y_2), (x_2, y_3), (x_4, y_4)\rbrace$
+	\item $x_{0}y_{0} \xrightarrow{\delta_{gap}} x_{0}y_{1} \xrightarrow{0} x_{1}y_{2} \xrightarrow{\delta_{gap}} x_{2}y_{2} \xrightarrow{0} x_{3}y_{3} \xrightarrow{0} x_{4}y_{4}$ 
+	
+	$M = \lbrace (x_1, y_2), (x_3, y_3), (x_4, y_4)\rbrace$
+	\end{itemize}	
+	
+	\subsection{Question 2.4}
+	Comme vu dans la question 2.3, cette méthode proposée aura alors pour complexité temporelle $\Theta(m \times n)$.\\
+	Cette méthode utilise un graphe qu'on représente sous forme d'un tableau à deux dimensions de taille $m \times n$. En effet, les arêtes et leur poids se déduisent du problème, de la valeur $\delta_{gap}$ et de la fonction $\delta_{x_i,\,y_j}$. Cette méthode aura donc pour complexité en espace $\Theta(m \times n)$.\\
+	C'est la même complexité globale que celle de l'approche proposée en première partie.
+	
+	\clearpage
+	\section{Partie 3}
+	\subsection{Question 3.1}
+	On suppose qu'on stocke les deux séquences en mémoire dans deux tableaux de taille respective $m$ et $n$. Les caractères étant codés sur 1 octet chacun, les approches précédentes occuperont au moins $m + n$ octets en mémoire juste pour le stockage des séquences.
+
+La structure de graphe (arêtes, sommets) peut se déduire des tableaux en mémoire, on aura donc pas besoin de représenter le graphe par liste d'adjacence.
+
+En revanche, les approches précédentes utilisent un tableau à deux dimensions de taille $(m + 1) \times (n + 1)$ entiers pour stocker le résultat de chaque appel à $F$. En supposant qu'un entier est codé sur 4 octets,  ce tableau occupera $4 \times (m + 1) \times (n + 1)$ octets d'espace mémoire.
+
+En sachant que d'après notre énoncé, les deux séquences comparées ont la même taille, on atteindra les limites d'un ordinateur de $8\;Go = 8\times10^9\;octets$ d'espace mémoire avec des séquences d'une taille environ égale à 44720 caractères. Les limites d'un ordinateur de $32\;Go = 32\times10^9\;octets$ seront atteintes pour des séquences d'une taille environ égale à 89440 caractères.
+
+
+\subsection{Question 3.2}	
+	La complexité de COUT2 est en $\Theta(n\times m)$ en temps et de $\Theta(n)$ en espace. 
+	
+	Ci-dessous le pseudocode de COUT2. On utilise un tableau à deux dimensions pour représenter les deux tableaux correspondant à deux lignes de la grille. On note $mod\ 2$ l'opération modulo 2.	
+	
+	\IncMargin{1em}
+	\begin{algorithm}[H]
+	%%%Variables
+	\SetKwData{Tab}{tab}\SetKwData{VarA}{v1}\SetKwData{VarB}{v2}\SetKwData{VarC}{v3}\SetKwData{indi}{i}\SetKwData{indj}{j}\SetKwData{seqX}{X}\SetKwData{seqY}{Y}\SetKwData{varpair}{pair}
+	%%%Fonctions
+	\SetKwFunction{Minimum}{min}
+	%%%Bull****	<--- Surveille ton langage !
+	\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+	%%%Algorithme
+	\Input{Séquences \seqX et \seqY, de longueurs $m$ et $n$ respectivement}
+	\Output{$F(m,\,n)$}
+	\BlankLine
+	\Tab un tableau à deux dimensions de taille $n \times 2$\;
+	$\varpair \leftarrow vrai$\;
+	\BlankLine
+	\For{\indi de $0$ à $m$}{
+		\eIf{$\varpair = vrai$}{
+			\For{\indj de $0$ à $n$}{
+				\eIf{$\indi = 0$ ou $\indj = 0$}{
+					\Tab[$0$][$\indj$] $\leftarrow (\indi + \indj)\times \delta_{gap}$ 			
+				}{
+					\VarA$\leftarrow$ \Tab[$1$][$\indj - 1$] $+ \delta _{x_{\indi}y_{\indj}}$\;
+		    			\VarB$\leftarrow$ \Tab[$1$][$\indj$] $+ \delta _{gap}$\;
+		    			\VarC$\leftarrow$ \Tab[$0$][$\indj - 1$] $+ \delta _{gap}$\;
+		    			\Tab[$0$][$\indj$]$\leftarrow$ \Minimum{\VarA, \VarB, \VarC}\;
+				}
+			}
+		}{
+			\For{\indj de $0$ à $n$}{
+				\eIf{$\indi = 0$ ou $\indj = 0$}{
+					\Tab[$1$][$\indj$] $\leftarrow (\indi + \indj)\times \delta_{gap}$ 			
+				}{
+					\VarA$\leftarrow$ \Tab[$0$][$\indj - 1$] $+ \delta _{x_{\indi}y_{\indj}}$\;
+		    			\VarB$\leftarrow$ \Tab[$0$][$\indj$] $+ \delta _{gap}$\;
+		    			\VarC$\leftarrow$ \Tab[$1$][$\indj - 1$] $+ \delta _{gap}$\;
+		    			\Tab[$1$][$\indj$]$\leftarrow$ \Minimum{\VarA, \VarB, \VarC}\;
+				}
+			}	
+		}
+		$\varpair \leftarrow \neg(\varpair)$
+	}
+	\KwRet \Tab[$m\ mod\ 2$][$n$]
+	\caption{COUT2}
+	\end{algorithm}\DecMargin{1em}
+	
+	
+	\subsection{Question 3.3}
+	
+		L'algorithme ci-dessous calcule $h(i, j)$ en $\mathcal{O}(m\times n)$ en temps et $\mathcal{O}(n)$ en espace.
+	
+	\vspace{5mm}
+	
+	\IncMargin{1em}
+	\begin{algorithm}[H]
+	%%%Variables
+	\SetKwData{Tab}{tab}\SetKwData{VarA}{v1}\SetKwData{VarB}{v2}\SetKwData{VarC}{v3}\SetKwData{indp}{p}
+	\SetKwData{indq}{q}\SetKwData{indi}{i}\SetKwData{indj}{j}\SetKwData{seqX}{X}\SetKwData{seqY}{Y}\SetKwData{varpair}{pair}
+	%%%Fonctions
+	\SetKwFunction{Minimum}{min}
+	%%%Bull****	<--- Surveille ton langage !
+	\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+	%%%Algorithme
+	\Input{Séquences \seqX et \seqY, de longueurs $m$ et $n$ respectivement.\\
+	Indices \indi et \indj pour lesquels on souhaite calculer $h$.}
+	\Output{$h(\indi,\indj)$}
+	\BlankLine
+	\Tab un tableau à deux dimensions de taille $(n - \indj + 1) \times 2$\;
+	
+	$\varpair \leftarrow vrai$\;
+	\BlankLine
+	\For{\indp de $0$ à $m - \indi$}{
+		\eIf{\varpair $= vrai$}{
+			\For{\indq de $0$ à $n - \indj$}{
+				\eIf{$\indp = 0$ ou $\indq = 0$}{
+					\Tab[$0$][$\indq$] $\leftarrow (\indp + \indq)\times \delta_{gap}$ 			
+				}{
+					\VarA$\leftarrow$ \Tab[$1$][$\indq - 1$] $+  \delta _{x_{\indi + \indp}y_{\indj + \indq}}$\;
+		    			\VarB$\leftarrow$ \Tab[$1$][$\indq$] $+  \delta _{gap}$\;
+		    			\VarC$\leftarrow$ \Tab[$0$][$\indq - 1$] $+  \delta _{gap}$\;
+		    			\Tab[$0$][$\indq$]$\leftarrow$ \Minimum{\VarA, \VarB, \VarC}\;
+				}
+			}
+		}{
+			\For{\indq de $0$ à $n - \indj$}{
+				\eIf{$\indp = 0$ ou $\indq = 0$}{
+					\Tab[$1$][$\indq$] $\leftarrow (\indp + \indq)\times \delta_{gap}$ 			
+				}{
+					\VarA$\leftarrow$ \Tab[$0$][$\indq - 1$] $+ \delta _{x_{\indi + \indp}y_{\indj + \indq}}$\;
+		    			\VarB$\leftarrow$ \Tab[$0$][$\indq$] $+ \delta _{gap}$\;
+		    			\VarC$\leftarrow$ \Tab[$1$][$\indq - 1$] $+ \delta _{gap}$\;
+		    			\Tab[$1$][$\indq$]$\leftarrow$ \Minimum{\VarA, \VarB, \VarC}\;
+		    		}
+		    	}
+		}
+		$\varpair \leftarrow \neg(\varpair)$
+	}
+	\KwRet \Tab[($m - \indi)\ mod\ 2$][$n - \indj$]
+	\caption{COUT2BIS}
+	\end{algorithm}\DecMargin{1em}	
+	\subsection{Question 3.4}
+	Soit $l$ la longueur d'un plus court chemin $c_{min}$ du sommet $(0,\,0)$ au sommet $(m,\,n)$ passant par le sommet $(i,\,j)$ dans le graphe $G_{XY}$. Montrons que $l = g(i,\,j) + h(i,\,j)$ :\\
+	\begin{mapreuve}
+	D'après nos hypothèses de départ, on sait que $c_{min}$ part du sommet $(0,\,0)$ et passe par le sommet $(i,\,j)$. Ainsi, $c_{min}$ est composé de deux sous-chemins de $(0,0)$ à $(i,j)$ et de $(i,j)$ à $(m,\,n)$ qui sont forcément des plus courts chemins.
+	
+	
+	Donc, le sous-chemin qui va du sommet $(0,\,0)$ au sommet $(i,\,j)$ a pour longueur $g(i,\,j)$ (par définition de la fonction $g$), et le sous-chemin de qui va du sommet $(i,\,j)$ au sommet $(m,\,n)$ a pour longueur $h(i,\,j)$ (par définition de la fonction $h$).\\
+	Par suite, $c_{min}$ a donc pour longueur $l = g(i,\,j) + h(i,\,j)$.\\
+	\end{mapreuve}
+	Une méthode pour calculer le coût d'un plus court chemin serait alors de calculer $g(i,\,j)$, puis de calculer $h(i,\,j)$ et d'additionner les deux résultats.
+	
+ 	\subsection{Question 3.5}
+ 	Un appel à $SOL2(0, 0, m, n)$ utilise plusieurs tableaux et matrices pour stocker des données précisées en annexe:
+ 	$X2a$, $Y2a$, $F2a$, $X2b$, $Y2b$ et $F2b$.\\
+ 	Si on additionne la taille de toutes ces structures, on trouve:\\
+ 	$$3 + (n + 1) + 3\times(n + 1) + m + 1 + 3 + (m + 1)\times 3$$
+ 	$$= 3 + n + 1 + 3n + 3 + m + 1 + 3 + 3m + 3$$
+ 	$$= 4n + 4m + 14$$
+ 	$$= 4\times (m + n) + 14$$
+ 	On voit donc que $SOL2(0, 0, m, n)$ est en $\mathcal{O}(m + n)$.\\
+ 	De plus, lors de l'étape 1, SOL2 fait appel à COUT2 et COUT2BIS. COUT2 étant en $\Theta(n)$ et COUT2BIS en $\mathcal{O}(n)$, on garde la complexité spatiale trouvée précédemment pour SOL2.\\
+ 	SOL2 a donc pour complexité spatiale $\mathcal{O}(m + n)$.
+ 	
+	
+	\clearpage
+	\section{Partie 4}
+	\subsection{Question 4.1}
+	La lecture des instances se fait grâce à la fonction $"get\_instance\_depuis\_fichier(fichier: str)"$, qui place une instance depuis un fichier dans un tuple (une collection d'éléments immuable). On découpe ensuite les élements de ce tuple pour les placer dans des variables qui leur sont propre appelées $"sequence\_X"$, $"sequence\_Y"$, $"taille\_X"$ et $"taille\_Y"$. Enfin, pour faciliter la lecture des séquences dans nos programmes, on retire les espaces situés entre chaque éléments dans les deux séquences grâce à la fonction $"get\_sequence\_sans\_espace(sequence: str)"$.\\
+	Un affichage des instances peut être obtenu en utilisant la fonction $"afficher\_instance(instance: tuple,\ espaces=True)"$. Cette fonction affichera les instances comme elles sont présentées dans les fichiers d'extension '.adn' fournis, et peut retirer les espaces entre chaque éléments des séquences grâce au booléen $"espaces"$.
+	
+	\subsection{Question 4.2}
+	Les algorithmes COUT1 et SOL1 peuvent être lancés en utilisant les fonctions $"COUT1(X: str, Y: str, m: int, n: int, F: list)"$ et $"SOL1(X: str, Y: str, x0: int, y0: int, m: int, n: int, F: list)"$.\\ La fonction SOL1 retourne une liste de paires correspondant au parcours inverse de la matrice $F$.
+	
+	\subsection{Question 4.3}
+	Deux fonctions différentes existent pour afficher la liste de l'alignement obtenu :\\
+	$"afficher\_alignement\_index(alignement: list)"$, qui affiche dans l'ordre l'alignement des index de la séquence X au dessus des index de la séquence Y.\\
+	$"afficher\_alignement\_caracteres(X: str,\ Y: str,\ alignement: list)"$, qui affiche dans l'ordre l'alignement des caractères de la séquence X au dessus des caractères de la séquence Y.
+	
+	\subsection{Question 4.4}
+		En utilisant gnuplot, on trouve les courbes de représentation de COUT1 et SOL1 suivantes :\\
+		% \includegraphics[width=\linewidth]{image_cout1.png}
+		% \includegraphics[width=\linewidth]{image_sol1.png}
+		En supposant que la taille des instances X et Y reste très proche et donc que $m = n$, alors d'après les questions 1.7 et 1.8, COUT1 et SOL1 devraient avoir comme complexité temporelle $\Theta(m^2)$ et $\mathcal{O}(m)$ respectivement. Les résultats obtenues pour COUT1 semblent correspondre avec nos analyses théoriques. Pour SOL1, on remarque que la courbe a une allure générale de fonction en $\mathcal{O}(m)$, mais qu'elle est très irrégulière. Ces temps élevés particuliers pourraient être dus aux tâches s'exécutant sur l'ordinateur en même temps que les mesures, ou aux spécificités de Python.
+	
+	\clearpage
+	\subsection{Question 4.5}
+	COUT1 et SOL1 s'arrêtent lors du calcul de l'instance $"Inst\_0050000\_88.adn"$ de taille $m = 50000$ sur un ordinateur avec les caractéristiques suivantes :
+	\begin{itemize}
+	\renewcommand{\labelitemi}{-} % Remplace les tirets moches de la liste par des tirets plus jolis
+	\item OS : OS X 10.9.5
+	\item Processeur : Intel I7 2.3 GHz
+	\item RAM : 8 Go
+	\end{itemize}
+	
+	\subsection{Question 4.6}
+	En utilisant gnuplot, on trouve les courbes de représentation de COUT1 et COUT2 suivantes :\\
+	% \includegraphics[width=\linewidth]{image_cout1cout2.png}
+	D'après la question 3.2, l'algorithme COUT2 devrait avoir comme complexité temporelle $\Theta(m^2)$, ce qui semble correspondre à la forme de la courbe obtenue.\\
+	Elle a quasiment le même temps d'exécution que COUT1, bien qu'elle soit légèrement plus rapide sur des instances de taille supérieure à 15000 caractères.\\
+	Comme COUT1, COUT2 s'arrête lors du calcul de l'instance $"Inst\_0050000\_88.adn"$ de taille $m = 50000$ avec le même ordinateur décrit dans la question 4.5. Nos implémentations des fonctions COUT1 et COUT2 retournent exactement les mêmes valeurs pour les instances qu'elles arrivent à calculer.	
+	
+	\clearpage
+	\subsection{Question 4.7}
+	En utilisant gnuplot, on trouve les courbes de représentation de COUT1, COUT2 et COUT2BIS suivantes :\\
+	% \includegraphics[width=\linewidth]{image_cout1cout2cout2bis.png}
+	D'après la question 3.3, l'algorithme COUT2BIS devrait avoir comme complexité temporelle $\Theta(m^2)$, ce qui semble correspondre à la forme de la courbe obtenue.\\
+	Elle a quasiment le même temps d'exécution que COUT1 et COUT2, bien qu'elle soit légèrement plus lente que ces deux algorithmes sur des instances de taille supérieure à 8000 caractères.\\
+	Comme COUT1 et COUT2, COUT2BIS s'arrête lors du calcul de l'instance $"Inst\_0050000\_88.adn"$ de taille $m = 50000$ avec le même ordinateur décrit dans la question 4.5.\\
+	Nos implémentations des fonctions COUT1, COUT2 et COUT2BIS retournent exactement les mêmes valeurs pour les instances qu'elles arrivent à calculer.
+	
+	\subsection{Question 4.8}
+	L'algorithme SOL2 est beaucoup plus lent que SOL1. Avec notre implémentation et sur l'ordinateur qu'on utilise, la temps de calcul de cet algorithme le rend inutilisable pour les instances avec des séquences de longueur supérieure à 1000. 
+	
+	\subsection{Question 4.9}
+	Avec notre implémentation, SOL2 retourne le bon coût minimal ainsi que le bon parcours pour les 2 premières instances. Cependant, il retourne un bon coût minimal mais un parcours erroné à partir de l'instance $"Inst\_0000100\_3.adn"$ de taille 100.
+	
+	\clearpage
+	\section{Annexe: Code des fonctions principales}
+	Le projet a été implémenté en Python. Ci-dessous les fonctions demandées dans la partie 4. Pour le reste du code, voir les fichiers source.
+	
+	\begin{verbatim}
+	def get_instance_depuis_fichier(fichier: str) -> tuple:
+    """ Lit un fichier d'instance puis retourne un tuple sous la forme :
+        (X, Y, taille_X, taille_Y)
+    """
+    chemin = "../instances/" + fichier
+    with open(chemin, 'r') as file:
+        taille_X = int(file.readline())
+        taille_Y = int(file.readline())
+        X = file.readline()
+        Y = file.readline()
+    X = retirer_espaces_a_la_fin(X)
+    Y = retirer_espaces_a_la_fin(Y)
+    return X, Y, taille_X, taille_Y
+	\end{verbatim}
+	
+	\begin{verbatim}	
+	def get_sequence_sans_espace(sequence: str) -> str:
+    """ Les sequences lues depuis un fichier contiennent des espaces
+        entre chaque element, cela peut être difficile à utiliser.
+        Cette fonction retourne la même séquence dénuée d'espaces entre
+        ses éléments.
+        Exemple :
+        >>> get_sequence_sans_espace("A C T G")
+        "ACTG"
+    """
+    sequence = sequence.split(sep=' ')
+    sequence_sans_espace = ""
+    for element in sequence:
+        sequence_sans_espace = "{}{}".format(sequence_sans_espace, element)
+    return sequence_sans_espace
+	\end{verbatim}
+	
+	\begin{verbatim}
+	def afficher_instance(instance: tuple, espaces=True) -> None:
+    """ Affiche une instance de la même manière que si elle
+        était stockée dans un fichier. Le booléen 'espace'
+        laisse les espaces entre chaque element d'une séquence
+        tels qu'ils sont dans les fichiers d'instance si il est
+        à 'True', il les supprime si il est à 'False'.
+    """
+    a_imprimer = [instance[2], instance[3], instance[0], instance[1]]
+    if not espaces:
+        a_imprimer[2] = get_sequence_sans_espace(a_imprimer[2])
+        a_imprimer[3] = get_sequence_sans_espace(a_imprimer[3])
+    print("{}\n{}\n{}\n{}".format(*a_imprimer))
+	\end{verbatim}
+	
+	\clearpage
+	\begin{verbatim}
+	def COUT1(X: str, Y: str, m: int, n: int, F: list) -> int:
+    """ Version bottom-up de COUT1
+        Retourne le coût de l'alignement optimal de X et Y,
+        deux séquences respectivement de taille m et n.
+        Modifie le tableau F en place.
+    """
+    # Initialiser la première ligne et colonne de F.
+    for k in range(m + 1):
+        F[k][0] = k * delta_gap()
+    for k in range(n + 1):
+        F[0][k] = k * delta_gap()
+
+    # Remplissage de la matrice F
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            F[i][j] = min(F[i - 1][j - 1] + delta_xy(X[i - 1], Y[j - 1]),
+                          F[i][j - 1] + delta_gap(),
+                          F[i - 1][j] + delta_gap())
+    return F[i][j]
+
+
+def SOL1(X: str, Y: str, x0: int, y0: int, m: int, n: int, F: list) -> list:
+    """ Version bottom-up de SOL1.
+        Retourne en ordre inverse (utiliser afficher_alignement_index)
+        l'alignement optimal de X et Y, deux séquences respectivement
+        de taille m et n, en couples d'INDICES, depuis le point (x0, y0).
+        Retourne le chemin complet dans le graphe (arêtes gap incluses).
+    """
+    M = []
+    i = m
+    j = n
+
+    while i != 0 and j != 0:
+        # Calcul du minimum
+        v1 = F[i - 1][j - 1] + delta_xy(X[i - 1], Y[j - 1])
+        v2 = F[i][j - 1] + delta_gap()
+        v3 = F[i - 1][j] + delta_gap()
+        minimum = min(v1, v2, v3)
+        M.append((i + x0, j + y0))
+        # Décrementation des choix en fonction du minimum
+        if minimum == v1:
+            i -= 1
+            j -= 1
+        elif minimum == v2:
+            j -= 1
+        else:
+            i -= 1
+
+    # Ajout des gaps initiaux
+    while i != 0:
+        M.append((i + x0, j + y0))
+        i -= 1
+    while j != 0:
+        M.append((i + x0, j + y0))
+        j -= 1
+    return M
+
+
+def COUT2(X: str, Y: str, m: int, n: int) -> int:
+    """ Version bottom-up de COUT1 plus efficace en mémoire.
+        Attention, incompatible avec les tableaux memo des
+        fonctions récursives.
+        Retourne le coût de l'alignement optimal de X et Y,
+        deux séquences respectivement de taille m et n.
+    """
+    # Initialisation de la matrice F
+    F = [[None for j in range(n + 1)], [None for j in range(n + 1)]]
+
+    pair = True
+    for i in range(0, m + 1):
+        # On rempli la première ligne du tableau
+        if pair:
+            for j in range(0, n + 1):
+                    if i == 0 or j == 0:
+                        F[0][j] = (i + j) * delta_gap()
+                    else:
+                        F[0][j] = min(F[1][j - 1] + delta_xy(X[i - 1], Y[j - 1]),
+                                      F[0][j - 1] + delta_gap(),
+                                      F[1][j] + delta_gap())
+        # On rempli la deuxième ligne du tableau
+        else:
+            for j in range(0, n + 1):
+                    if i == 0 or j == 0:
+                        F[1][j] = (i + j) * delta_gap()
+                    else:
+                        F[1][j] = min(F[0][j - 1] + delta_xy(X[i - 1], Y[j - 1]),
+                                      F[1][j - 1] + delta_gap(),
+                                      F[0][j] + delta_gap())
+        # On switch de ligne à remplir
+        pair = not pair
+    return F[m % 2][n]
+    \end{verbatim}
+
+\clearpage
+\begin{verbatim}
+def COUT2BIS(X: str, Y: str, m: int, n: int, i: int, j: int) -> int:
+    """ Retourne h(i, j) pour des séquences X, Y
+        de longueur m et n respectivement.
+    """
+    # Initialisation de la matrice h
+    h = [[None for j in range(n - j + 1)], [None for j in range(n - j + 1)]]
+
+    pair = True
+    for p in range(0, m - i + 1):
+        # On rempli la première ligne du tableau
+        if pair:
+            for q in range(0, n - j + 1):
+                if p == 0 or q == 0:
+                    h[0][q] = (p + q) * delta_gap()
+                else:
+                    h[0][q] = min(h[1][q - 1] + delta_xy(X[i + p - 1], Y[j + q - 1]),
+                                  h[0][q - 1] + delta_gap(),
+                                  h[1][q] + delta_gap())
+        # On rempli la deuxième ligne du tableau
+        else:
+            for q in range(0, n - j + 1):
+                if p == 0 or q == 0:
+                    h[1][q] = (p + q) * delta_gap()
+                else:
+                    h[1][q] = min(h[0][q - 1] + delta_xy(X[i + p - 1], Y[j + q - 1]),
+                                  h[1][q - 1] + delta_gap(),
+                                  h[0][q] + delta_gap())
+        # On switch de ligne à remplir
+        pair = not pair
+    return h[(m - i) % 2][n - j]
+	\end{verbatim}	
+	
+
+\end{document}

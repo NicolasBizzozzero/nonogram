@@ -1,0 +1,153 @@
+\documentclass[a4paper]{memoir}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=3cm]{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage{graphicx}
+\usepackage{parskip}
+\usepackage{pgf}
+\usepackage{qtree}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{color}
+\usetikzlibrary{arrows, automata, positioning}
+\usepackage{lstautogobble}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage[]{algorithm2e}
+\usepackage{empheq}
+
+
+%%% Définition de la page de garde %%%
+%% J'ai trouvé cet exemple à cette adresse :
+%% http://mirror.jmu.edu/pub/CTAN/info/latex-samples/TitlePages/titlepages.pdf
+%% Tous mes remerciements vont donc à l'auteur du code de cette page, Peter Wilson
+\newlength{\drop}% for my convenience
+\newcommand*{\titleM}{\begingroup % Misericords, T&H p 153
+\drop = 0.08\textheight
+\centering
+\vspace*{\drop}
+{\Huge\bfseries Mini-Projet MOGPL}\\[\baselineskip]
+{\large\scshape Un problème de tomographie discrète}\\[\baselineskip]
+{\large\scshape 4I200}\\[\baselineskip]
+\begin{vplace}[0.7]
+\textit{
+Compte-rendu du projet
+}
+\end{vplace}
+
+{\scshape Réalisé par\\ BIZZOZZ\'ERO Nicolas\\ et\\ MIRHOSSEINI Yoones}\par
+\vspace*{2\drop}
+\endgroup}
+%%% Fin de la définition de la page de garde %%%
+
+%%% Définition de la numérotation des pages %%%
+\let\footruleskip\undefined
+\usepackage{fancyhdr} 
+\fancyhf{}
+\cfoot{\thepage}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+%%% Fin de la définition de la numérotation des pages %%%
+
+%%% Définition de la numérotation des sections %%%
+\setcounter{secnumdepth}{50}
+\setcounter{tocdepth}{50}
+\renewcommand{\thesection}{}
+\renewcommand{\thesubsection}{}
+\renewcommand{\thesubsubsection}{}
+%%% Fin de la définition de la numérotation des sections %%%
+
+\newenvironment{mapreuve}[1][\proofname]{\proof[#1]\mbox{}\\*}{\endproof}
+%%% Fin de la définition des noms d'objets utilisés %%%
+
+
+\renewcommand{\labelitemi}{-} % Remplace les tirets moches de la liste par des tirets plus jolis
+
+
+%%% On Définie l'indentation par défaut à 0
+\setlength{\parindent}{0cm}
+
+
+\begin{document}
+	%%% Page de garde %%%
+	\begin{center}
+	\titleM	
+	\end{center}
+	\clearpage
+	
+	\begin{center}
+	\tableofcontents
+	\end{center}
+	
+	\newpage
+	\section{Raisonnement par programmation dynamique}
+	\subsection{Première étape}
+	\subsubsection{Q1}
+	Si on a déjà calculé tous les $T(j,\; l)$, alors on cherche à savoir si toutes les $m$ cases de la ligne peuvent être coloriées avec la sous-séquence de $k$ blocs. Il suffira donc de vérifier la valeur de retour de l'appel $T(m - 1,\; k)$ :
+	\begin{itemize}
+	\renewcommand{\labelitemi}{-} % Remplace les tirets moches de la liste par des tirets plus jolis
+	\item S'il renvoie $true$, alors on peut colorier la ligne entière avec la séquence entière.
+	\item S'il renvoie $false$, alors la ligne ne peut pas être coloriée entièrement avec la séquence entière.
+	\end{itemize}
+	
+	\subsubsection{Q2}
+	\begin{itemize}
+	\renewcommand{\labelitemi}{-} % Remplace les tirets moches de la liste par des tirets plus jolis
+	\item \textbf{1.} Si $l = 0$, alors on pourra toujours colorier un nombre infini de cases avec une sous-séquence vide, donc $T(j,\;0) = true,\ \forall\ j \in \{0, \ldots, m - 1\}$.
+ 	\item \textbf{2.} Si $l \geq 1$, alors :
+ 		\begin{itemize}
+		\renewcommand{\labelitemii}{$\bullet$} % Remplace les tirets moches de la liste par des tirets plus jolis
+			\item \textbf{2.a} Si $j < s_l - 1$, alors on veut placer au moins un bloc qui est plus gros que le nombre de cases disponible, ce qui est impossible. Donc $T(j,\; l) = false,\ \forall\ j \in \{0, \ldots, m - 1\}$  
+ 			\item \textbf{2.b} Si $j = s_l - 1$, alors l'appel à la fonction donnera le même résultat que lors du cas 2.a, excepté si $l = 1$. En effet, le seul bloc à placer rentrera parfaitement dans les cases disponibles. Donc :
+ 			\begin{itemize}
+			\renewcommand{\labelitemiii}{$\circ$} % Remplace les tirets moches de la liste par des tirets plus jolis
+				\item Si $l = 1$, $T(j,\; l) = true,\ \forall\ j \in \{0, \ldots, m - 1\}$.
+				\item Si $l > 1$, $T(j,\; l) = false,\ \forall\ j \in \{0, \ldots, m - 1\}$.
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+	
+	\subsubsection{Q3}
+	En langage naturel, la relation de récurrence qu'on cherche à exprimer se dirait :\\
+\textit{Si j'ai déjà placé tous les blocs de la sous-séquence sauf le dernier, et que j'ai encore assez de cases pour l'ajouter avec son espace de séparation, alors je peux placer tous les blocs dans les cases.}\\
+On en déduit donc la relation suivante :
+\begin{equation}
+T(j,\; l) = T(j - (s_l + 1),\; l - 1)\notag
+\end{equation}
+
+
+	\subsubsection{Q4}
+
+	\subsection{Généralisation}
+	\subsubsection{Q5}
+	\subsubsection{Q6}
+
+	\subsection{Propagation}
+	\subsubsection{Q7}
+
+	\subsection{Tests}
+	\subsubsection{Q8}
+	\subsubsection{Q9}
+	
+	\section{La PLNE à la rescousse}
+	\subsection{Modélisation}
+	\subsubsection{Q10}
+	\subsubsection{Q11}
+	\subsubsection{Q12}
+	
+	\subsection{Implantation et tests}
+	\subsubsection{Q13}
+	\subsubsection{Q14}
+	\subsubsection{Q15}
+	
+	\section{Pour aller plus loin (facultatif)}
+	
+
+\end{document}

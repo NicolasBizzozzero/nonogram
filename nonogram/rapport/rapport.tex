@@ -1,0 +1,106 @@
+\documentclass[a4paper]{memoir}
+\usepackage{rapport}
+
+\begin{document}
+	%%% Page de garde %%%
+	\begin{center}
+	\titleM	
+	\end{center}
+	\clearpage
+	
+	\begin{center}
+	\tableofcontents
+	\end{center}
+	
+	\newpage
+	\section{Raisonnement par programmation dynamique}
+	\subsection{Première étape}
+	\subsubsection{Q1}
+	Si on a déjà calculé tous les $T(j,\; l)$, alors on cherche à savoir si toutes les $m$ cases de la ligne peuvent être coloriées avec la sous-séquence de $k$ blocs. Il suffira donc de vérifier la valeur de retour de l'appel $T(m - 1,\; k)$ :
+	\begin{itemize}
+	\item S'il renvoie $true$, alors on peut colorier la ligne entière avec la séquence entière.
+	\item S'il renvoie $false$, alors la ligne ne peut pas être coloriée entièrement avec la séquence entière.
+	\end{itemize}
+	
+	\subsubsection{Q2}
+	Dans cette question, on ne prend pas en compte l'état des cases. 
+	\begin{itemize}
+	\item \textbf{1.} Si $l = 0$, alors on pourra toujours colorier un nombre infini de cases avec une sous-séquence vide, donc $T(j,\;0) = true,\ \forall\ j \in \{0, \ldots, m - 1\}$.
+ 	\item \textbf{2.} Si $l \geq 1$, alors :
+ 		\begin{itemize}
+		\renewcommand{\labelitemii}{$\bullet$} % Remplace les tirets moches de la liste par des tirets plus jolis
+			\item \textbf{2.a} Si $j < s_l - 1$, alors on veut placer au moins un bloc qui est plus gros que le nombre de cases disponible, ce qui est impossible. Donc $T(j,\; l) = false,\ \forall\ j \in \{0, \ldots, m - 1\}$  
+ 			\item \textbf{2.b} Si $j = s_l - 1$, alors l'appel à la fonction donnera le même résultat que lors du cas 2.a, excepté si $l = 1$. En effet, le seul bloc à placer rentrera parfaitement dans les cases disponibles. Donc :
+ 			\begin{itemize}
+				\item Si $l = 1$, $T(j,\; l) = true,\ \forall\ j \in \{0, \ldots, m - 1\}$.
+				\item Si $l > 1$, $T(j,\; l) = false,\ \forall\ j \in \{0, \ldots, m - 1\}$.
+			\end{itemize}
+			\item \textbf{2.c} Si $j > s_l - 1$, alors, comme on  a pas prit en compte l'état des cases, on place le dernier bloc de taille $s_l$ (qui est bien plaçable car $j > s_l - 1$), et on considère une case de séparation, puis il faut s'assurer que les blocs de $s_1 \ldots s_{l-1}$ peuvent aussi être placés dans le reste des cases (des cases $0 \ldots s_l - 1$).
+		\end{itemize}
+	\end{itemize}
+	
+	\subsubsection{Q3}
+	On déduit de la question 2, la relation de récurrence suivante :
+\begin{equation}
+T(j,\; l) = T(j - (s_l + 1),\; l - 1)\notag
+\end{equation}
+
+	\subsubsection{Q4}
+	L'algorithme se situe dans le fichier \textbf{src\/solveurs\/dynamic\_programming.py} sous la fonction \textbf{T\_sans\_ligne}.
+
+\subsection{Généralisation}
+\subsubsection{Q5}
+Dans cette question, on prend en compte l'état des cases.
+\begin{itemize}
+\item \textbf{1.} Si $l = 0$, alors on ne peut rien placer sur cette lignes, donc il ne faut aucune case noire sur cette ligne.
+\item \textbf{2.} Si $l \geq 1$, alors :
+    \begin{itemize}
+        \item \textbf{2.a} Si $j < s_l - 1$, alors on veut placer au moins un bloc qui est plus gros que le nombre de cases disponible, ce qui est impossible. Donc $T(j,\; l) = false,\ \forall\ j \in \{0, \ldots, m - 1\}$  
+        \item \textbf{2.b} Si $j = s_l - 1$, alors l'appel à la fonction donnera le même résultat que lors du cas 2.a, excepté si $l = 1$. En effet, le seul bloc à placer rentrera parfaitement dans les cases disponibles. Donc :
+        \begin{itemize}
+            \item Si $l = 1$, donc il ne faut aucune case blanche sur cette ligne.
+            \item Si $l > 1$, alors on retourne $false$.
+        \item \textbf{2.c} Si $j > s_l - 1$, alors, on a trois cas possibles :
+            \begin{itemize}
+                \item \textbf{2.c.1} Si la case $j$ est blanche, alors on peut pas utiliser cette case pour placer les blocs. Donc on vérifie si on peut les placer sur les cases $0 \ldots j-1$.
+                \item \textbf{2.c.2} Si la case $j$ est noire, alors il faut vérifier que de la case $j - s_l + 1$ jusqu'à la case $j$ il n'y a aucune case blanche, autrement dit on vérifie qu'on peut bien placer le dernier bloc dans ces cases. Puis, on a deux cas possibles. Soit $l = 1$, dans ce cas il faut vérifier que parmi toutes les cases $0 \ldots j - s_l$ il n'y a aucune case noire. Sinon, si $l > 1$, il faut vérifier que la case de séparation $j - s_l$ n'est pas noire et ensuite il faut vérifier qu'on puisse placer les blocs de $1$ à $l - 1$ de la case $0$ jusqu'à $j - s_l - 1$.
+                \item \textbf{2.c.3} Si la case $j$ est non décidée, alors si l'un des deux cas précédent est vrai, alors on peut placer notre bloc jusqu'à la case $j$ car on est libre de lui donner la couleur blanche ou noire.
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{itemize}	
+	
+	\subsubsection{Q6}
+	L'algorithme récursif se situe dans le fichier $src/solveurs/dynamic_programming.py$ sous la fonction $T\_recursif$. On a aussi programmé une version itérative de l'algorithme, qui donne de meilleurs temps d'exécution sur de grandes instances. Dans la suite du projet, c'est la version itérative qui sera utilisée.
+
+	\subsection{Propagation}
+	\subsubsection{Q7}
+	Nous avons séparé l'algorithme de propagation donné dans l'énoncé dans deux fonctions \textbf{propagation} et \textbf{resoudre} qui se trouvent dans le fichier src/solveurs/dynamic_programming.py.
+
+	\subsection{Tests}
+	\subsubsection{Q8}
+	Les temps de résolution pour chaque instance ainsi que les grilles obtenues sont données dans l'annexe en fin de rapport.
+	
+	\subsubsection{Q9}
+	Pour les instances 0 à 10, l'algorithme retourne la bonne solution (sans case non-décidée). Cependant, pour les instances 11 à 16, la solution est toujours incomplète (il reste des cases non-décidée). En effet, l'algorithme dynamique décide correctement les couleurs de certaines cases, mais par contre il y a des cases pour lesquelles l'algorithme ne peut pas décider. Expliquons en détails ce qu'il se passe pour l'instance 11 :\\
+	L'algorithme commence par vérifier les lignes. Pour la première case de la première ligne, on vérifie si on peut la colorier en noir, puis on vérifie pour la couleur blanche. Les deux cas sont possibles, donc l'algorithme ne colorie pas la case. Puis il commence à vérifier la deuxième case de la première ligne, et il se passe la même chose. Et ainsi de suite pour toutes les cases de la grille.\\
+	En effet, à la fin de la vérification des lignes, on a colorié aucune des cases, et donc à l'étape suivante, il n'y a aucune colonne à vérifier (on ne vérifie que les colonnes dont une couleur a été décidée dans la première étape). Et donc, à la fin de la première itération, les deux ensembles des lignes et colonnes à voir sont vides, donc l'algorithme s'arrête et retourne une grille contenant uniquement des cases non-décidées.\\
+	Vous trouverez la grille obtenue pour cet algorithme sur l'instance 11 dans l'annexe en fin de rapport.	
+	
+	\section{La PLNE à la rescousse}
+	\subsection{Modélisation}
+	\subsubsection{Q10}
+		
+	
+	\subsubsection{Q11}
+	\subsubsection{Q12}
+	
+	\subsection{Implantation et tests}
+	\subsubsection{Q13}
+	\subsubsection{Q14}
+	\subsubsection{Q15}
+	
+	\section{Pour aller plus loin (facultatif)}
+	
+
+\end{document}

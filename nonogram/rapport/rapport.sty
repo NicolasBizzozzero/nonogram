@@ -1,0 +1,103 @@
+\NeedsTeXFormat{LaTeX2e}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Package name and information %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ProvidesPackage{rapport}[2017/11/20 Bizzozzéro Nicolas Custom LaTeX style]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Most used packages %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage{graphicx}
+\usepackage{parskip}
+\usepackage{pgf}
+\usepackage{qtree}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{color}
+\usetikzlibrary{arrows, automata, positioning}
+\usepackage{lstautogobble}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage[]{algorithm2e}
+
+%%% Used language
+\usepackage[french]{babel}
+
+%%% Default margin
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=3cm]{geometry}
+
+%%% Default indentation
+\setlength{\parindent}{0cm}
+
+
+%%%%%%%%%%%%%%%%%%
+%%% Cover page %%%
+%%%%%%%%%%%%%%%%%%
+%%% Template link :
+%%% http://mirror.jmu.edu/pub/CTAN/info/latex-samples/TitlePages/titlepages.pdf
+%%% Many thanks to Peter Wilson for is work.
+\newlength{\drop}
+\newcommand*{\titleM}{\begingroup % Misericords, T&H p 153
+\drop = 0.08\textheight
+\centering
+\vspace*{\drop}
+
+%%% Document title
+{\Huge\bfseries Mini-Projet MOGPL}\\[\baselineskip]
+
+%%% Document sub-title, can be repeated
+{\large\scshape Un problème de tomographie discrète}\\[\baselineskip]
+{\large\scshape 4I200}\\[\baselineskip]
+
+%%% Center text
+\begin{vplace}[0.7]
+    \textit{Compte-rendu du projet}
+\end{vplace}
+
+%%% Authors
+{\scshape Réalisé par\\ BIZZOZZ\'ERO Nicolas\\ et\\ MIRHOSSEINI Yoones}\par
+
+\vspace*{2\drop}
+\endgroup}
+
+
+%%%%%%%%%%%%%%%%%%%
+%%% Page number %%%
+%%%%%%%%%%%%%%%%%%%
+\let\footruleskip\undefined
+\usepackage{fancyhdr} 
+\fancyhf{}
+\cfoot{\thepage}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Section name format %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{secnumdepth}{50}
+\setcounter{tocdepth}{50}
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%% Environments %%%
+%%%%%%%%%%%%%%%%%%%%
+%%% Proof
+\newenvironment{myproof}[1][\proofname]{\proof[#1]\mbox{}\\*}{\endproof}
+
+
+\endinput
