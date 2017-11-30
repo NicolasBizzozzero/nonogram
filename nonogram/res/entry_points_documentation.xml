@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<entry_points>
+    <entry_point name="main_entry_point">
+        <documentation>{global_name}
+
+Usage:
+  {doc_usage}
+
+Options:
+  {param_help}{LONG_SPACE}{doc_help}
+  {param_version}{LONG_SPACE}{doc_version}
+  {param_solving_method}=METHOD{LONG_SPACE}{doc_solving_method}
+        </documentation>
+    </entry_point>
+</entry_points>
