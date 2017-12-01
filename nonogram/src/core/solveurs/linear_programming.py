@@ -165,10 +165,13 @@ def not_interdit(sequence,N,M,mode_PL):
 # t_r : temps resolution
 # t_t : temps total de PL
 # t_2 - t_1 + T_t : temps total de temps total
-def resoudre(contraintes_lignes, contraintes_colonnes):
+def resoudre(contraintes_lignes, contraintes_colonnes, grille_preremplie=None):
     # Initialisation des variables
     N, M = len(contraintes_lignes), len(contraintes_colonnes)
-    grille = np.full((N, M), CASE_VIDE)
+    if not grille_preremplie:
+        grille = np.full((N, M), CASE_VIDE)
+    else:
+        grille = grille_preremplie
 
     instancename = "INSTANCE"
 
