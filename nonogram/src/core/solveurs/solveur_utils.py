@@ -17,7 +17,7 @@ class SolvingMethod(IntEnum):
 
 
 class SolvingMethodNotSupported(Exception):
-    def __init__(self, solving_method: str):
+    def __init__(self, solving_method):
         Exception.__init__(self, "The solving method \"{solving_method}\" is "
                            "currently not supported.".format(
                                solving_method=solving_method))

@@ -1,9 +1,9 @@
-from grille.grille_utils import CHAR_NOIR, CHAR_BLANC, CHAR_VIDE
+from __future__ import print_function
 
 import pylab as plt
 from  matplotlib.patches import  Rectangle
-
 from matplotlib.collections import PatchCollection
+from grille.grille_utils import CHAR_NOIR, CHAR_BLANC, CHAR_VIDE
 
 
 def dessiner(grille):
