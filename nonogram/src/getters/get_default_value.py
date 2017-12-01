@@ -12,7 +12,7 @@ def _get_value_from_file(value):
         return json.load(file)[value]
 
 
-def solving_method() -> float:
+def solving_method():
     return _get_value_from_file("solving_method")
 
 

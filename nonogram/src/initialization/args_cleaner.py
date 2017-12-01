@@ -14,7 +14,7 @@ _KEY_FILE = gpn.file().split()[-1]
 _KEY_SOLVING_METHOD = gpn.solving_method().split()[-1]
 
 
-def clean_arguments(args: dict) -> None:
+def clean_arguments(args):
     """ Clean the command-line arguments parsed by the `docopt` package.
     It mainly convert string values to their numeric and enum counterpart.
     It also checks if some of the parameters are invalids and raises

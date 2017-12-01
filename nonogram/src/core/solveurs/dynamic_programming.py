@@ -59,7 +59,7 @@ def T_recursif(s, li):
     return True
 
 
-def T(sequence,li):
+def T(sequence, li):
     M, k = len(li), len(sequence) + 1
     tab = np.array([[False  for _ in range(k)] for _ in range(M)])
     for j in range(M):

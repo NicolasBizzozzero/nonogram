@@ -41,7 +41,7 @@ _FORMAT_DICTIONARY = dict(
 )
 
 
-def parse_args_main_entry_point() -> None:
+def parse_args_main_entry_point():
     """ This method used the `docopt` package (listed as a dependency) to
     easily combine the tedious task of writing documentation and parsing
     arguments.

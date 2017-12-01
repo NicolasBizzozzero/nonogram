@@ -12,67 +12,67 @@ def _get_value_from_file(value):
         return json.load(file)[value]
 
 
-def name() -> str:
+def name():
     return _get_value_from_file("name")
 
 
-def description() -> str:
+def description():
     return _get_value_from_file("description")
 
 
-def keywords() -> str:
+def keywords():
     return _get_value_from_file("keywords")
 
 
-def main_homepage() -> str:
+def main_homepage():
     return _get_value_from_file("main_homepage")
 
 
-def download_url() -> str:
+def download_url():
     return _get_value_from_file("download_url")
 
 
-def version() -> str:
+def version():
     return _get_value_from_file("version")
 
 
-def author() -> str:
+def author():
     return _get_value_from_file("author")
 
 
-def maintainer() -> str:
+def maintainer():
     return _get_value_from_file("maintainer")
 
 
-def email() -> str:
+def email():
     return _get_value_from_file("email")
 
 
-def status() -> str:
+def status():
     return _get_value_from_file("status")
 
 
-def copyright_text() -> str:
+def copyright_text():
     return _get_value_from_file("copyright")
 
 
-def credits_authors() -> list:
+def credits_authors():
     return _get_value_from_file("credits")
 
 
-def license_used() -> str:
+def license_used():
     return _get_value_from_file("license")
 
 
-def classifiers() -> list:
+def classifiers():
     return _get_value_from_file("classifiers")
 
 
-def dependencies() -> list:
+def dependencies():
     return _get_value_from_file("dependencies")
 
 
-def main_entry_point() -> str:
+def main_entry_point():
     return _get_value_from_file("main_entry_point")
 
 

@@ -18,14 +18,14 @@
   "classifiers": [
         "Development Status :: 5 - Production/Stable",
         "Natural Language :: French",
-        "Intended Audience :: Education",
+        "Intended Audience :: Edu cation",
         "Topic :: Games/Entertainment :: Puzzle Games",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Programming Language :: Python :: 3.5"
   ],
   "dependencies": [
     "docopt >= 0.6.2",
-    "numpy >= 1.12.1",
+    "numpy >= 1.12.0",
   ],
   "main_entry_point": "nonogram",
 }

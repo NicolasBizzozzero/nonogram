@@ -12,15 +12,15 @@ def _get_name_from_file(value):
         return json.load(file)[value]
 
 
-def help_message() -> str:
+def help_message():
     return _get_name_from_file("help")
 
 
-def version() -> str:
+def version():
     return _get_name_from_file("version")
 
 
-def solving_method() -> str:
+def solving_method():
     return _get_name_from_file("solving_method")
 
 

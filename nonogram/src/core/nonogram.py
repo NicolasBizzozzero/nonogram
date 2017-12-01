@@ -5,7 +5,7 @@ import src.core.solveurs.linear_programming as lp
 from src.core.grille.affichage import affiche_grille
 
 
-def nonogram(file: str, solving_method: SolvingMethod):
+def nonogram(file, solving_method):
     constraints_lines, constraints_columns = parse_instance(file)
     grid = _solve(constraints_lines, constraints_columns, solving_method)
     affiche_grille(grid, file)

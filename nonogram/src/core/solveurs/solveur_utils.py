@@ -23,7 +23,7 @@ class SolvingMethodNotSupported(Exception):
                                solving_method=solving_method))
 
 
-def str_to_solving_method(solving_method: str) -> SolvingMethod:
+def str_to_solving_method(solving_method):
     try:
         return SolvingMethod[solving_method.upper()]
     except KeyError:

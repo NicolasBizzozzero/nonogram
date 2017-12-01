@@ -12,19 +12,19 @@ def _get_doc_from_file(value):
         return json.load(file)[value]
 
 
-def usage() -> str:
+def usage():
     return _get_doc_from_file("usage")
 
 
-def help_message() -> str:
+def help_message():
     return _get_doc_from_file("help")
 
 
-def version() -> str:
+def version():
     return _get_doc_from_file("version")
 
 
-def solving_method() -> str:
+def solving_method():
     return _get_doc_from_file("solving_method")
 
 
