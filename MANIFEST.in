@@ -1,7 +1,7 @@
 include README.md
 include LICENSE.txt
-include fforest/res/default_values.json
-include fforest/res/entry_points_documentation.xml
-include fforest/res/global_variables.json
-include fforest/res/parameters_documentation.json
-include fforest/res/parameters_names.json
+include nonogram/res/default_values.json
+include nonogram/res/entry_points_documentation.xml
+include nonogram/res/global_variables.json
+include nonogram/res/parameters_documentation.json
+include nonogram/res/parameters_names.json

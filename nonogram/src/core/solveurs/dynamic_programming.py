@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from solveurs.solveur_utils import CASE_BLANCHE, CASE_NOIRE, CASE_VIDE,\
+from nonogram.src.core.solveurs.solveur_utils import CASE_BLANCHE, CASE_NOIRE, CASE_VIDE,\
     GrilleImpossible
-from vrac.decorateurs import timeit, check_solution
+from nonogram.src.core.vrac.decorateurs import timeit, check_solution
 
 
 def T_sans_ligne(j, l, s):

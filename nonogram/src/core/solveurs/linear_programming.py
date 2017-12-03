@@ -1,12 +1,12 @@
 # -*-   coding: utf-8 -*-
 import numpy as np
-from vrac.decorateurs import timeit
 import time
 from gurobipy import *  #TODO: Importer les element uns par uns
 
-from solveurs.solveur_utils import CASE_BLANCHE, CASE_NOIRE, CASE_VIDE,\
+from nonogram.src.core.vrac.decorateurs import timeit
+from nonogram.src.core.solveurs.solveur_utils import CASE_BLANCHE, CASE_NOIRE, CASE_VIDE,\
     GrilleImpossible
-from solveurs.dynamic_programming import propagation
+from nonogram.src.core.solveurs.dynamic_programming import propagation
 
 
 #sequence est une liste de deux lists, 

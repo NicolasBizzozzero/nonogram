@@ -1,4 +1,4 @@
-from solveurs.solveur_utils import CASE_NOIRE, CASE_BLANCHE, CASE_VIDE
+from nonogram.src.core.solveurs.solveur_utils import CASE_NOIRE, CASE_BLANCHE, CASE_VIDE
 
 
 CHAR_BLANC = "X"

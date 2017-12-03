@@ -1,7 +1,7 @@
 """ Contient toute sorte de décorateurs utiles pour le projet. """
 from time import time
 
-from grille.grille_utils import verifie_grille
+from nonogram.src.core.grille.grille_utils import verifie_grille
 
 
 def timeit(function):

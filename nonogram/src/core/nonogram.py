@@ -1,8 +1,8 @@
-from src.core.solveurs.solveur_utils import SolvingMethod
-from src.core.grille.parser import parse_instance
-import src.core.solveurs.dynamic_programming as dp
-import src.core.solveurs.linear_programming as lp
-from src.core.grille.affichage import affiche_grille
+from nonogram.src.core.solveurs.solveur_utils import SolvingMethod
+from nonogram.src.core.grille.parser import parse_instance
+import nonogram.src.core.solveurs.dynamic_programming as dp
+import nonogram.src.core.solveurs.linear_programming as lp
+from nonogram.src.core.grille.affichage import affiche_grille
 
 
 def nonogram(file, solving_method):

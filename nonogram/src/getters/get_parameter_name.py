@@ -12,6 +12,10 @@ def _get_name_from_file(value):
         return json.load(file)[value]
 
 
+def file():
+    return _get_name_from_file("file")
+
+
 def help_message():
     return _get_name_from_file("help")
 
