@@ -5,7 +5,6 @@ from nonogram.src.core.nonogram import nonogram
 
 
 def main_entry_point():
-    print("Yoooo")
     parse_args_main_entry_point()
     nonogram(file=env.file,
              solving_method=env.solving_method)

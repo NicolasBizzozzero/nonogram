@@ -38,7 +38,7 @@ def PL(contraintes_lignes, contraintes_colonnes,instancename,grille,mode,mode_PL
     #sup
     if mode == 'with_propagation':
         c,k = ajoute_contraints(m,grille,contraintes_lignes, contraintes_colonnes,lx,ly,lz)
-        print("Algorithme dynamique a decidé pour "+str(k)+" case")
+        print("Algorithme dynamique a decidé pour " + str(k) + " case")
         if k == N*M:
             return (grille , 0,0,0)
     
