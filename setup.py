@@ -82,7 +82,7 @@ setup(
     # pip to create the appropriate form of executable for the target platform.
     entry_points={
         'console_scripts': [
-            ggv.main_entry_point() + ' = src.main:main_entry_point',
-        ],
-    },
+            ggv.main_entry_point() + ' = nonogram.main:main_entry_point',
+        ]
+    }
 )
