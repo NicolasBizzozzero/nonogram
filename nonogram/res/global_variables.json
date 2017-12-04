@@ -1,7 +1,7 @@
 {
   "name": "nonogram",
   "description": "Command-line tools to solve nonograms/picross",
-  "keywords": "command-line, solver, nonogram, picross",
+  "keywords": ["command-line", "solver", "nonogram", "picross"],
   "main_homepage": "https://github.com/NicolasBi/nonogram",
   "download_url": "https://github.com/NicolasBi/nonogram/tarball/master",
   "version": "1.0.0",
@@ -18,7 +18,7 @@
   "classifiers": [
         "Development Status :: 5 - Production/Stable",
         "Natural Language :: French",
-        "Intended Audience :: Edu cation",
+        "Intended Audience :: Education",
         "Topic :: Games/Entertainment :: Puzzle Games",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Programming Language :: Python :: 3.5"
