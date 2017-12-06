@@ -43,7 +43,6 @@ def PL(contraintes_lignes, contraintes_colonnes, grille, propagation):
     if propagation:
         cases_resolues = ajoute_contraintes(model, grille, contraintes_lignes,
                                             contraintes_colonnes, lx, ly, lz)
-        print("l'algorithme dynamique a résolu", cases_resolues, "case(s).")
 
         # Cas où la programmation dynamique a déjà résolu la grille
         if cases_resolues == N * M:

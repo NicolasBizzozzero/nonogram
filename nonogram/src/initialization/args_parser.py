@@ -29,6 +29,7 @@ _FORMAT_DICTIONARY = dict(
     doc_solving_method=gpd.solving_method(),
 
     # Parameters
+    param_file=gpn.file(),
     param_help_message=gpn.help_message(),
     param_version=gpn.version(),
     param_solving_method=gpn.solving_method(),
@@ -65,9 +66,9 @@ def parse_args_main_entry_point():
 Usage:
   {doc_usage}
 Options:
-  {param_help_message}            {doc_help_message}
-  {param_version}                 {doc_version}
-  {param_solving_method}=METHOD   {doc_solving_method}
+  {param_help_message}  {doc_help_message}
+  {param_version}  {doc_version}
+  {param_solving_method}=METHOD  {doc_solving_method}
 """.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
