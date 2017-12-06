@@ -4,7 +4,7 @@
   "keywords": ["command-line", "solver", "nonogram", "picross"],
   "main_homepage": "https://github.com/NicolasBi/nonogram",
   "download_url": "https://github.com/NicolasBi/nonogram/tarball/master",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "author": "Bizzozzéro Nicolas, Mirhosseini Yoones",
   "maintainer": "Bizzozzéro Nicolas, Mirhosseini Yoones",
   "email": "nicolasbizzozzero@gmail.com",

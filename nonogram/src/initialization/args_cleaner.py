@@ -20,5 +20,5 @@ def clean_arguments(args):
     It also checks if some of the parameters are invalids and raises
     exceptions accordingly.
     """
-    env.file = args[_KEY_FILE][1:-1]
+    env.file = args[_KEY_FILE]
     env.solving_method = str_to_solving_method(args[_KEY_SOLVING_METHOD])
