@@ -13,15 +13,13 @@ def nonogram(file, solving_method):
 
 def _solve(constraints_lines, constraints_columns, solving_method):
     if solving_method == SolvingMethod.DYNAMIC:
-        return dp.resoudre(constraints_lines, constraints_columns)
+        return dp.resoudre_dynamique(constraints_lines, constraints_columns)[0]
 
     elif solving_method == SolvingMethod.LINEAR:
-        return lp.resoudre(constraints_lines, constraints_columns)
+        return lp.resoudre_linear(constraints_lines, constraints_columns, propagation=False)[0]
 
     elif solving_method == SolvingMethod.BOTH:
-        grid = dp.resoudre(constraints_lines, constraints_columns)
-        return lp.resoudre(constraints_lines, constraints_columns,
-                           grille_preremplie=grid)
+        return lp.resoudre_linear(constraints_lines, constraints_columns, propagation=True)[0]
 
 
 if __name__ == '__main__':

@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 from __future__ import print_function
-
 import pylab as plt
 from  matplotlib.patches import  Rectangle
 from matplotlib.collections import PatchCollection
+
 from nonogram.src.core.grille.grille_utils import CHAR_NOIR, CHAR_BLANC, CHAR_VIDE
 
 
@@ -23,7 +24,7 @@ def affiche_grille(grille, titre):
     # Divers préparatifs
     n = len(grille)
     m = len(grille[0])
-    plt.rcParams['figure.figsize'] = int((m * 5)/ n), 5
+    plt.rcParams['figure.figsize'] = int((m * 5) / n), 5
     plt.subplots_adjust(bottom=0.02, top=0.92, left=0.02, right=0.98)
     graphe = plt.subplot(1, 1, 1)
     graphe.get_xaxis().set_visible(False)

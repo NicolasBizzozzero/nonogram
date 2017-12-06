@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """ Ce module contient tous les outils utiles et communs aux solveurs d'une
 grille.
 """

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """ Lit proprement des inputs donnés comme décrits dans la question 7. """
 
 DELIMITEUR = "#\n"
