@@ -1,9 +1,9 @@
-# 4I200_MOGPL-projet
-[fr] Projet de l'UE MOGPL [4I200]
-
-
-## Idées
-* Créer un package pip (trouver un nom)
-
-solve <CONSTRAINTS_FILE> --method DYNAMIC | LINEAR | BOTH
-
+# Todo
+* Add the following parameters :
+    * encoding
+    * verbose (tell when a bloc has been placed)
+    * progressbar
+    * output = (stdout in raw format | picture in window | picture saved)
+    * picture_output_path
+    * grid_path (with an non-empty grid)
+* Add a decorator outputing the current grid when a ctrl + c happen
