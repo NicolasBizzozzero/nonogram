@@ -1,7 +1,8 @@
 {
-    "usage": "nonogram <{param_file}> [options]\n",
-    "help": "Print this help message then exit.\n",
-    "version": "Print the software's version, then exit.\n",
+    "usage": "nonogram <{param_file}> [options]",
+    "help": "Print this help message then exit.",
+    "version": "Print the software's version, then exit.",
 
-    "solving_method": "Method used for solving a problem. Values can be 'DYNAMIC', 'LINEAR' or 'BOTH'. [default: {default_solving_method}]\n"
+    "solving_method": "Method used for solving a problem. Values can be 'DYNAMIC', 'LINEAR', 'DYNAMIC_LINEAR', 'DYNAMIC_OPTIMIZED'. [default: {default_solving_method}]",
+    "encoding": "Encoding used to read the constraints' file. [default: {default_encoding}]"
 }

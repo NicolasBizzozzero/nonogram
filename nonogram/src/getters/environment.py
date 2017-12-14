@@ -4,3 +4,4 @@ modules and packages of the software.
 
 file = None
 solving_method = None
+encoding = None

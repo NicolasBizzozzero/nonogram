@@ -27,15 +27,18 @@ _FORMAT_DICTIONARY = dict(
     doc_help_message=gpd.help_message(),
     doc_version=gpd.version(),
     doc_solving_method=gpd.solving_method(),
+    doc_encoding=gpd.encoding(),
 
     # Parameters
     param_file=gpn.file(),
     param_help_message=gpn.help_message(),
     param_version=gpn.version(),
     param_solving_method=gpn.solving_method(),
+    param_encoding=gpn.encoding(),
 
     # Default values
     default_solving_method=gdv.solving_method(),
+    default_encoding=gdv.encoding(),
 
     # Miscellaneous
     global_name=ggv.name()
@@ -69,6 +72,7 @@ Options:
   {param_help_message}  {doc_help_message}
   {param_version}  {doc_version}
   {param_solving_method}=METHOD  {doc_solving_method}
+  {param_encoding}=ENCODING  {doc_encoding}
 """.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)

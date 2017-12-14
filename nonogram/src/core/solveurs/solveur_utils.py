@@ -14,7 +14,8 @@ CASE_NOIRE = 1
 class SolvingMethod(IntEnum):
     DYNAMIC = 0
     LINEAR = 1
-    BOTH = 2
+    DYNAMIC_LINEAR = 2
+    DYNAMIC_OPTIMIZED = 3
 
 
 class SolvingMethodNotSupported(Exception):

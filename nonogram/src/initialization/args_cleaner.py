@@ -12,6 +12,7 @@ from nonogram.src.core.solveurs.solveur_utils import \
 
 _KEY_FILE = "<" + gpn.file().split()[-1] + ">"
 _KEY_SOLVING_METHOD = gpn.solving_method().split()[-1]
+_KEY_ENCODING = gpn.encoding().split()[-1]
 
 
 def clean_arguments(args):
@@ -22,3 +23,4 @@ def clean_arguments(args):
     """
     env.file = args[_KEY_FILE]
     env.solving_method = str_to_solving_method(args[_KEY_SOLVING_METHOD])
+    env.encoding = args[_KEY_ENCODING]
