@@ -35,7 +35,7 @@ The linear-programming solver need the <b><a href="http://www.gurobi.com">Gurobi
 * Add a decorator outputing the current grid when a ctrl + c happen
 
 # Acknowledgments
-We would like to thanks the **Pierre et Marie Curie** university, for giving us the possibility and authorization to release this project.  
+We would like to thanks the **Pierre et Marie Curie University** (UPMC), for giving us the possibility and authorization to release this project.  
 We also want to thanks professor <a href="http://www-poleia.lip6.fr/~escoffier/">Bruno Escoffier</a> for offering us the knowledge and oppoortunities needed to build this software.
 
 
