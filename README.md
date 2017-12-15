@@ -1,3 +1,9 @@
+# nonogram
+<p align="center">
+    <img src="https://github.com/NicolasBi/nonogram/blob/master/nonogram/res/tux.gif?raw=true" alt="tux gif"/>
+</p>
+
+
 # Installation
 The following line will install the **nonogram** package on your computer and add an entry point to the software
 ```shell
