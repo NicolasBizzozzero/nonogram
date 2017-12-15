@@ -1,3 +1,4 @@
 {
-    "solving_method": "DYNAMIC"
+    "solving_method": "DYNAMIC_OPTIMIZED",
+    "encoding": "utf8"
 }

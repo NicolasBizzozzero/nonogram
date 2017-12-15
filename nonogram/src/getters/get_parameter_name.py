@@ -28,5 +28,9 @@ def solving_method():
     return _get_name_from_file("solving_method")
 
 
+def encoding():
+    return _get_name_from_file("encoding")
+
+
 if __name__ == '__main__':
     pass

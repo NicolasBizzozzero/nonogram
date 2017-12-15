@@ -1,20 +1,17 @@
 # -*- coding: utf-8 -*-
-""" Ce module contient tous les outils utiles et communs aux solveurs d'une
-grille.
+""" This module contains all the tools usable by every solver.
 """
-
-from enum import IntEnum
-
 
 CASE_BLANCHE = -1
 CASE_VIDE = 0
 CASE_NOIRE = 1
 
 
-class SolvingMethod(IntEnum):
+class SolvingMethod():
     DYNAMIC = 0
     LINEAR = 1
-    BOTH = 2
+    DYNAMIC_LINEAR = 2
+    DYNAMIC_OPTIMIZED = 3
 
 
 class SolvingMethodNotSupported(Exception):
@@ -25,17 +22,25 @@ class SolvingMethodNotSupported(Exception):
 
 
 def str_to_solving_method(solving_method):
-    try:
-        return SolvingMethod[solving_method.upper()]
-    except KeyError:
+    solving_method = solving_method.lower()
+    if solving_method == "dynamic":
+        return SolvingMethod.DYNAMIC
+    elif solving_method == "linear":
+        return SolvingMethod.LINEAR
+    elif solving_method == "dynamic_linear":
+        return SolvingMethod.DYNAMIC_LINEAR
+    elif solving_method == "dynamic_optimized":
+        return SolvingMethod.DYNAMIC_OPTIMIZED
+    else:
         raise SolvingMethodNotSupported(solving_method)
 
 
 class GrilleImpossible(Exception):
-    """ Exception lancée lorsqu'une grille est impossible à résoudre. """
+    """ This exception is raised when a grid appear to be impossible to solve.
+    """
 
     def __init__(self):
-        Exception.__init__(self, "La grille est impossible à résoudre.")
+        Exception.__init__(self, "The grid appear to be impossible to solver.")
 
 
 if __name__ == '__main__':

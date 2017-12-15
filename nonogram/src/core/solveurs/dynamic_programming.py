@@ -72,7 +72,6 @@ def T_recursif(s, li, cache):
         elif li[M - 1] == CASE_VIDE:
             cache[K, M] = b or T_recursif(s, li[:M - 1], cache)
             return cache[K, M]
-    return True
 
 
 def T(s, li):
@@ -85,7 +84,7 @@ def T(s, li):
     return T_recursif(s, li, cache)
 
 
-def propagation(grille, contraintes_lignes, contraintes_colonnes,
+def propag_once(grille, contraintes_lignes, contraintes_colonnes,
                 indexes_a_voir, index_a_ajouter):
     """ Applique une demi-itération de l'algorithme de propagation décrit dans
     l'annexe.
@@ -120,30 +119,38 @@ def propagation(grille, contraintes_lignes, contraintes_colonnes,
                 index_a_ajouter |= {j}
 
 
-def resoudre_dynamique(contraintes_lignes, contraintes_colonnes):
+def propagation(contraintes_lignes, contraintes_colonnes, grid):
     """ Résout une grille de nonogram avec une méthode de programmation
     dynamique. Correspond à l'algorithme demandé dans la question 7.
     """
-    # Initialisation des variables
-    N, M = len(contraintes_lignes), len(contraintes_colonnes)
-    grille = np.full((N, M), CASE_VIDE)
-    lignes_a_voir = set(range(N))
+    lignes_a_voir = set(range(len(contraintes_lignes)))
     colonnes_a_voir = set()
-
-    t1 = time()
     while lignes_a_voir or colonnes_a_voir:
         # Application de l'algorithme de propagation sur les lignes à voir
-        propagation(grille, contraintes_lignes, contraintes_colonnes,
+        propag_once(grid, contraintes_lignes, contraintes_colonnes,
                     lignes_a_voir, colonnes_a_voir)
         lignes_a_voir = set()
 
         # Application de l'algorithme de propagation sur les colonnes à voir
-        propagation(grille.T, contraintes_colonnes, contraintes_lignes,
+        propag_once(grid.T, contraintes_colonnes, contraintes_lignes,
                     colonnes_a_voir, lignes_a_voir)
         colonnes_a_voir = set()
-    t2 = time()
 
-    return grille, t2 - t1
+
+def solve(contraintes_lignes, contraintes_colonnes, grid):
+    t1 = time()
+    propagation(contraintes_lignes, contraintes_colonnes, grid)
+    t2 = time()
+    return grid, t2 - t1
+
+
+def is_solvable(contraintes_lignes, contraintes_colonnes, grid):
+    t1 = time()
+    try:
+        propagation(contraintes_lignes, contraintes_colonnes, grid)
+        return True, time() - t1
+    except GrilleImpossible:
+        return False, time() - t1
 
 
 if __name__ == '__main__':
