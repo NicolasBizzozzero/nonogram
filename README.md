@@ -1,5 +1,3 @@
-# nonogram
-
 # Installation
 The following line will install the **nonogram** package on your computer and add an entry point to the software
 ```shell
@@ -16,8 +14,8 @@ Launching the software is pretty straightforward. All the parameters have been a
 The linear-programming solver need the <b><a href="http://www.gurobi.com">Gurobi Optimizer</a></b> software to be installed and properly configured.
 
 # Dependencies
-* numpy $\geq$ 1.12.0
-* docopt $\geq$ 0.6.2
+* numpy ≥ 1.12.0
+* docopt ≥ 0.6.2
 
 # Contributing
 1. Fork the project.
@@ -42,7 +40,7 @@ We also want to thanks professor <a href="http://www-poleia.lip6.fr/~escoffier/"
 
 
 # License
-This project is licensed under the GPLv3 License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GPLv3 License - see the [LICENSE.txt](LICENSE.txt) file for details.
 
 # References
 
