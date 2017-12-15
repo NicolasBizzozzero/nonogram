@@ -4,7 +4,7 @@ from solveurs.solveur_utils import SolvingMethod, CASE_VIDE
 from grille.parser import parse_instance
 from grille.affichage import affiche_grille
 import solveurs.dynamic_programming as dp
-import solveurs.linear_programming as lp
+# import solveurs.linear_programming as lp
 import solveurs.dynamic_optimized_programming as dop
 
 
@@ -17,30 +17,23 @@ def nonogram(file, solving_method, encoding):
 
 
 def _solve(constraints_lines, constraints_columns, solving_method, grid):
-    # TODO: Rename all methods 'solve'
     if solving_method == SolvingMethod.DYNAMIC:
-        return dp.resoudre_dynamique(constraints_lines, constraints_columns, grid=grid)[0]
+        return dp.solve(constraints_lines, constraints_columns, grid=grid)[0]
 
     elif solving_method == SolvingMethod.LINEAR:
-        return lp.resoudre_linear(constraints_lines, constraints_columns,
-                                  grid=grid, propagation=False)[0]
+        return lp.solve(constraints_lines, constraints_columns,
+                        grid=grid, propagation=False)[0]
 
     elif solving_method == SolvingMethod.DYNAMIC_LINEAR:
-        return lp.resoudre_linear(constraints_lines, constraints_columns,
-                                  grid=grid, propagation=True)[0]
+        return lp.solve(constraints_lines, constraints_columns,
+                        grid=grid, propagation=True)[0]
 
     elif solving_method == SolvingMethod.DYNAMIC_OPTIMIZED:
-        # if instance_index == 15:
-        #     poids_a, poids_b = 1, 0
-        # else:
-        #     poids_a, poids_b = 0, 1
-        poids_a, poids_b = 0, 1
-        grid, temps_resolution, nb_appels = dop.solve(constraints_lines,
-                                                      constraints_columns,
-                                                      grid=grid, max_call=100,
-                                                      poids_a=poids_a,
-                                                      poids_b=poids_b)
-        return grid
+        weight_len, weight_colored = 0, 1
+        return dop.solve(constraints_lines, constraints_columns,
+                         grid=grid, max_call=100,
+                         weight_len=weight_len,
+                         weight_colored=weight_colored)[0]
 
 
 if __name__ == '__main__':

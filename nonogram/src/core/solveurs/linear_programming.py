@@ -9,49 +9,49 @@ from time import time
 from gurobipy import *
 
 from nonogram.src.core.solveurs.solveur_utils import CASE_BLANCHE, CASE_NOIRE, CASE_VIDE
-from nonogram.src.core.solveurs.dynamic_programming import resoudre_dynamique
+from nonogram.src.core.solveurs.dynamic_programming import solve as solve_dynamic
 
 
 MODEL_NAME = "nonogram_solver"
 
 
-def PL(contraintes_lignes, contraintes_colonnes, grille, propagation):
-    """ Applique l'algorithme du PL sur une grille de nonogram.
+def PL(line_constraints, column_constraints, grid, propagation):
+    """ Applique l'algorithme du PL sur une grid de nonogram.
     Correspond à l'algorithme demandé dans la question 14.
     """
     global MODEL_NAME
 
     # Declaration
-    N, M, = len(contraintes_lignes), len(contraintes_colonnes)
+    N, M, = len(line_constraints), len(column_constraints)
     model = Model(MODEL_NAME)
     model.setParam('OutputFlag', False)
 
     # Calcul des cases possibles (cases qui peuvent être noircies)
-    autorisees_Y = cases_possibles(contraintes_lignes, N, M)
-    autorisees_Z = cases_possibles(contraintes_colonnes, M, N)
+    autorisees_Y = cases_possibles(line_constraints, N, M)
+    autorisees_Z = cases_possibles(column_constraints, M, N)
 
     # Variables type 1 X i,j
     lx = np.array([[model.addVar(vtype=GRB.BINARY) for j in range(M)] for i in range(N)])
 
     # Variables type 2 Y i,j,t
-    ly = np.array([[[model.addVar(vtype=GRB.BINARY) if j in autorisees_Y[i][t] else None for t in range(len(contraintes_lignes[i]))] for j in range(M)] for i in range(N)])
+    ly = np.array([[[model.addVar(vtype=GRB.BINARY) if j in autorisees_Y[i][t] else None for t in range(len(line_constraints[i]))] for j in range(M)] for i in range(N)])
 
     # Variables type 2 Z i,j,t
-    lz = np.array([[[model.addVar(vtype=GRB.BINARY) if i in autorisees_Z[j][t] else None for t in range(len(contraintes_colonnes[j]))] for i in range(N)] for j in range(M)])
+    lz = np.array([[[model.addVar(vtype=GRB.BINARY) if i in autorisees_Z[j][t] else None for t in range(len(column_constraints[j]))] for i in range(N)] for j in range(M)])
 
     # Ajout des contraintes dans le cas d'une propagation préliminaire
     if propagation:
-        cases_resolues = ajoute_contraintes(model, grille, contraintes_lignes,
-                                            contraintes_colonnes, lx, ly, lz)
+        cases_resolues = ajoute_contraintes(model, grid, line_constraints,
+                                            column_constraints, lx, ly, lz)
 
-        # Cas où la programmation dynamique a déjà résolu la grille
+        # Cas où la programmation dynamique a déjà résolu la grid
         if cases_resolues == N * M:
-            return (grille, 0)
+            return (grid, 0)
 
     # lignes:
     # Yijt =1 0<=j < M un bloc commence a une seul case
     for i in range(N):
-        for t in range(len(contraintes_lignes[i])):
+        for t in range(len(line_constraints[i])):
             l1 = [ly[i, k][t] for k in range(M) if ly[i, k][t]]
             if len(l1) > 0:
                 model.addConstr(quicksum(key1 for key1 in l1), GRB.EQUAL, 1)
@@ -59,31 +59,31 @@ def PL(contraintes_lignes, contraintes_colonnes, grille, propagation):
     # l'ordre , Decalage et Q10
     for i in range(N):
         for j in range(M):
-            for t in range(len(contraintes_lignes[i])):
+            for t in range(len(line_constraints[i])):
                 if ly[i, j][t]:
                     l1 = []
-                    for t1 in range(t + 1, len(contraintes_lignes[i])):
-                        l1 += [ly[i, k][t1] for k in range(j + contraintes_lignes[i][t] + 1) if k < M and ly[i, k][t1]]
+                    for t1 in range(t + 1, len(line_constraints[i])):
+                        l1 += [ly[i, k][t1] for k in range(j + line_constraints[i][t] + 1) if k < M and ly[i, k][t1]]
                     if len(l1) > 0:
                         model.addConstr(len(l1) * ly[i, j][t] + quicksum(keyy for keyy in l1)<= len(l1))
-                    l1 = [lx[i,k] for k in range(j, j + contraintes_lignes[i][t]) if k < M]
+                    l1 = [lx[i,k] for k in range(j, j + line_constraints[i][t]) if k < M]
                     if len(l1) > 0:
-                        model.addConstr(contraintes_lignes[i][t] * ly[i,j][t] <= quicksum(keyx for keyx in l1))
-            for t in range(len(contraintes_colonnes[j])):
+                        model.addConstr(line_constraints[i][t] * ly[i,j][t] <= quicksum(keyx for keyx in l1))
+            for t in range(len(column_constraints[j])):
                 if lz[j, i][t]:
                     l1 = []
-                    for t1 in range(t + 1, len(contraintes_colonnes[j])):
-                        l1 += [lz[j, k][t1] for k in range(i + contraintes_colonnes[j][t] + 1) if k < N and lz[j, k][t1]]
+                    for t1 in range(t + 1, len(column_constraints[j])):
+                        l1 += [lz[j, k][t1] for k in range(i + column_constraints[j][t] + 1) if k < N and lz[j, k][t1]]
                     if len(l1) > 0:
                         model.addConstr(len(l1) * lz[j, i][t] + quicksum(keyz for keyz in l1) <= len(l1))
-                    l1 = [lx[k, j] for k in range(i, i + contraintes_colonnes[j][t]) if k < N]
+                    l1 = [lx[k, j] for k in range(i, i + column_constraints[j][t]) if k < N]
                     if len(l1) > 0:
-                        model.addConstr(contraintes_colonnes[j][t] * lz[j,i][t] <= quicksum(keyx for keyx in l1))
+                        model.addConstr(column_constraints[j][t] * lz[j,i][t] <= quicksum(keyx for keyx in l1))
 
     # Les colonnes
     # Zijt =1 0<=j < M un bloc commence a une seule case
     for j in range(M):
-        for t in range(len(contraintes_colonnes[j])):
+        for t in range(len(column_constraints[j])):
             l1 = [lz[j, i][t] for i in range(N) if lz[j, i][t]]
             if len(l1) > 0:
                 model.addConstr(quicksum(key1 for key1 in l1), GRB.EQUAL, 1)
@@ -95,42 +95,42 @@ def PL(contraintes_lignes, contraintes_colonnes, grille, propagation):
     model.optimize()
     t2 = time()
 
-    # Construction de la grille. En effet, Gurobipy sauvegarde la solution de
-    # la grille dans son vecteur de solution. Il faut récupèrer les valeurs et
-    # les assigner à notre grille manuellement.
+    # Construction de la grid. En effet, Gurobipy sauvegarde la solution de
+    # la grid dans son vecteur de solution. Il faut récupèrer les valeurs et
+    # les assigner à notre grid manuellement.
     for i in range(N):
         for j in range(M):
-            if grille[i, j] == CASE_VIDE:
+            if grid[i, j] == CASE_VIDE:
                 valeurs = lx[i, j].x
                 # Passage d'un flottant en entier
                 if valeurs < 0 or (valeurs >= 0 and valeurs < .5):
-                    grille[i, j] = CASE_BLANCHE
+                    grid[i, j] = CASE_BLANCHE
                 else:
-                    grille[i, j] = CASE_NOIRE
+                    grid[i, j] = CASE_NOIRE
 
-    return grille, t2 - t1
+    return grid, t2 - t1
 
 
-def ajoute_contraintes(model, grille, contraintes_lignes, contraintes_colonnes,
+def ajoute_contraintes(model, grid, line_constraints, column_constraints,
                        lx, ly, lz):
     """ Ajoute des contraintes au model en considèrant les valeurs déjà
-    définies dans la grille. Cette fonction est utilisée pour une grille déjà
+    définies dans la grid. Cette fonction est utilisée pour une grid déjà
     pré-remplie. Elle evite à l'algorithme de programmation linéaire de
     calculer des contraintes déjà réalisées auparavant.
     """
     cases_resolues = 0
-    for i in range(len(contraintes_lignes)):
-        for j in range(len(contraintes_colonnes)):
-            if grille[i, j] == CASE_NOIRE:
+    for i in range(len(line_constraints)):
+        for j in range(len(column_constraints)):
+            if grid[i, j] == CASE_NOIRE:
                 model.addConstr(lx[i, j], GRB.EQUAL, 1)
                 cases_resolues += 1
-            elif grille[i, j] == CASE_BLANCHE:
+            elif grid[i, j] == CASE_BLANCHE:
                 model.addConstr(lx[i, j], GRB.EQUAL, 0)
                 cases_resolues += 1
-                for t in range(len(contraintes_lignes[i])):
+                for t in range(len(line_constraints[i])):
                     if ly[i, j][t]:
                         model.addConstr(ly[i, j][t], GRB.EQUAL, 0)
-                for t in range(len(contraintes_colonnes[j])):
+                for t in range(len(column_constraints[j])):
                     if lz[j, i][t]:
                         model.addConstr(lz[j, i][t], GRB.EQUAL, 0)
     return cases_resolues
@@ -179,21 +179,17 @@ def cases_possibles(sequence, N, M):
     return cases_possibles
 
 
-def resoudre_linear(contraintes_lignes, contraintes_colonnes, propagation):
-    """ Résout une grille de nonogram avec une méthode de programmation
+def solve(line_constraints, column_constraints, grid, propagation):
+    """ Résout une grid de nonogram avec une méthode de programmation
     linéaire.
     """
     temps_dynamique = 0
     if propagation:
-        grille, temps_dynamique = resoudre_dynamique(contraintes_lignes,
-                                                     contraintes_colonnes)
-    else:
-        grille = np.full((len(contraintes_lignes), len(contraintes_colonnes)),
-                         CASE_VIDE)
+        grid, temps_dynamique = solve_dynamic(line_constraints, column_constraints, grid)
 
-    grille, temps_lineaire = PL(contraintes_lignes, contraintes_colonnes,
-                                grille, propagation)
-    return grille, temps_lineaire, temps_dynamique
+    grid, temps_lineaire = PL(line_constraints, column_constraints,
+                                grid, propagation)
+    return grid, temps_lineaire, temps_dynamique
 
 
 if __name__ == '__main__':
