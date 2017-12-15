@@ -4,7 +4,7 @@ from solveurs.solveur_utils import SolvingMethod, CASE_VIDE
 from grille.parser import parse_instance
 from grille.affichage import affiche_grille
 import solveurs.dynamic_programming as dp
-# import solveurs.linear_programming as lp
+import solveurs.linear_programming as lp
 import solveurs.dynamic_optimized_programming as dop
 
 

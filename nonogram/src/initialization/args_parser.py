@@ -17,6 +17,7 @@ import nonogram.src.getters.get_default_value as gdv
 import nonogram.src.getters.get_global_variable as ggv
 import nonogram.src.getters.get_parameter_documentation as gpd
 import nonogram.src.getters.get_parameter_name as gpn
+import nonogram.src.getters.get_entry_point_documentation as gepd
 from nonogram.src.initialization.args_cleaner import clean_arguments
 import docopt
 
@@ -61,19 +62,15 @@ def parse_args_main_entry_point():
     defined in only one location (the `res` folder) for a quicker and easier
     maintenance.
     """
+    documentation = gepd.main_entry_point()
+    _parse_args(documentation)
+
+
+def _parse_args(documentation):
     global _FORMAT_DICTIONARY
 
-    # Format the string twice because all the "doc_" variables contains
-    # default variables which need to be formated too
-    documentation = """{global_name}
-Usage:
-  {doc_usage}
-Options:
-  {param_help_message}  {doc_help_message}
-  {param_version}  {doc_version}
-  {param_solving_method}=METHOD  {doc_solving_method}
-  {param_encoding}=ENCODING  {doc_encoding}
-""".format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
+    # Format the string twice because all the "doc_" variables contains default variables which need to be formatted too
+    documentation = documentation.format(**_FORMAT_DICTIONARY).format(**_FORMAT_DICTIONARY)
 
     arguments = docopt.docopt(documentation, version=ggv.version(), help=True)
     clean_arguments(arguments)

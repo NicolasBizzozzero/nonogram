@@ -5,6 +5,7 @@ optimisée.
 
 import numpy as np
 from time import time
+from copy import deepcopy
 
 from nonogram.src.core.solveurs.solveur_utils import CASE_BLANCHE,\
     CASE_NOIRE, CASE_VIDE, GrilleImpossible
@@ -45,8 +46,8 @@ def find_best_index(line_constraints, column_constraints, grid, l, N, M,
     return i_max, j_max
 
 
-def dynamic_optimized(line_constraints, column_constraints, grid, nb_calls, borne, N, M, weight_len, weight_colored):
-    if borne > 0 and nb_calls > borne:
+def dynamic_optimized(line_constraints, column_constraints, grid, nb_calls, max_call, N, M, weight_len, weight_colored):
+    if max_call > 0 and nb_calls > max_call:
         return grid, False, nb_calls
 
     l = [(i, j) for i in range(N) for j in range(M) if grid[i][j] == CASE_VIDE]
@@ -57,37 +58,37 @@ def dynamic_optimized(line_constraints, column_constraints, grid, nb_calls, born
     grid_copy = deepcopy(grid)
     i, j = find_best_index(
         line_constraints, column_constraints, grid, l, N, M, weight_len, weight_colored)
-    grid_copy[i, j] = NOIRE
-    possible, _ = resoudre_dynamique(
+    grid_copy[i, j] = CASE_NOIRE
+    possible, _ = is_solvable(
         line_constraints, column_constraints, grid_copy)
     if possible:
         grid_finished, complete, nb_calls = dynamic_optimized(
-            line_constraints, column_constraints, grid_copy, nb_calls + 1, borne, N, M, weight_len, weight_colored)
+            line_constraints, column_constraints, grid_copy, nb_calls + 1, max_call, N, M, weight_len, weight_colored)
         if complete:
             return grid_finished, complete, nb_calls
     grid_copy = deepcopy(grid)
     grid_copy[i, j] = CASE_BLANCHE
-    possible, td_etap = resoudre_dynamique(
+    possible, td_etap = is_solvable(
         line_constraints, column_constraints, grid_copy)
     if possible:
         grid_finished, complete, nb_calls = dynamic_optimized(
-            line_constraints, column_constraints, grid_copy, nb_calls + 1, borne, N, M, weight_len, weight_colored)
+            line_constraints, column_constraints, grid_copy, nb_calls + 1, max_call, N, M, weight_len, weight_colored)
         if complete:
             return grid_finished, complete, nb_calls
     return grid, False, nb_calls
 
 
-def solve(line_constraints, column_constraints, grid, borne, weight_len=0, weight_colored=1):
+def solve(line_constraints, column_constraints, grid, max_call, weight_len=0, weight_colored=1):
     N, M = len(line_constraints), len(column_constraints)
 
-    is_solvable, td = is_solvable(
+    solvable, td = is_solvable(
         line_constraints, column_constraints, grid)
-    if not is_solvable:
+    if not solvable:
         raise GrilleImpossible()
 
     t0 = time()
     grid, complete, nb_calls = dynamic_optimized(
-        line_constraints, column_constraints, grid, 0, borne, N, M, weight_len, weight_colored)
+        line_constraints, column_constraints, grid, 0, max_call, N, M, weight_len, weight_colored)
     t1 = time()
     if complete:
         return grid, td + (t1 - t0), nb_calls

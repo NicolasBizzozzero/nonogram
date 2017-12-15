@@ -7,9 +7,10 @@ Usage:
   {doc_usage}
 
 Options:
-  {param_help}{LONG_SPACE}{doc_help}
-  {param_version}{LONG_SPACE}{doc_version}
-  {param_solving_method}=METHOD{LONG_SPACE}{doc_solving_method}
+  {param_help_message}  {doc_help_message}
+  {param_version}  {doc_version}
+  {param_solving_method}=METHOD  {doc_solving_method}
+  {param_encoding}=ENCODING  {doc_encoding}
         </documentation>
     </entry_point>
 </entry_points>
