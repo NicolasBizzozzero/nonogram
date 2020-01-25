@@ -6,7 +6,6 @@ la seconde partie du projet.
 from __future__ import print_function
 import numpy as np
 from time import time
-from gurobipy import *
 
 from nonogram.src.core.solveurs.solveur_utils import CASE_BLANCHE, CASE_NOIRE, CASE_VIDE
 from nonogram.src.core.solveurs.dynamic_programming import solve as solve_dynamic
@@ -21,6 +20,8 @@ def PL(line_constraints, column_constraints, grid, propagation):
     """
     global MODEL_NAME
 
+    from gurobipy import Model, GRB, quicksum
+
     # Declaration
     N, M, = len(line_constraints), len(column_constraints)
     model = Model(MODEL_NAME)
@@ -34,10 +35,12 @@ def PL(line_constraints, column_constraints, grid, propagation):
     lx = np.array([[model.addVar(vtype=GRB.BINARY) for j in range(M)] for i in range(N)])
 
     # Variables type 2 Y i,j,t
-    ly = np.array([[[model.addVar(vtype=GRB.BINARY) if j in autorisees_Y[i][t] else None for t in range(len(line_constraints[i]))] for j in range(M)] for i in range(N)])
+    ly = np.array([[[model.addVar(vtype=GRB.BINARY) if j in autorisees_Y[i][t] else None
+                        for t in range(len(line_constraints[i]))] for j in range(M)] for i in range(N)])
 
     # Variables type 2 Z i,j,t
-    lz = np.array([[[model.addVar(vtype=GRB.BINARY) if i in autorisees_Z[j][t] else None for t in range(len(column_constraints[j]))] for i in range(N)] for j in range(M)])
+    lz = np.array([[[model.addVar(vtype=GRB.BINARY) if i in autorisees_Z[j][t] else None
+                        for t in range(len(column_constraints[j]))] for i in range(N)] for j in range(M)])
 
     # Ajout des contraintes dans le cas d'une propagation préliminaire
     if propagation:
@@ -65,10 +68,10 @@ def PL(line_constraints, column_constraints, grid, propagation):
                     for t1 in range(t + 1, len(line_constraints[i])):
                         l1 += [ly[i, k][t1] for k in range(j + line_constraints[i][t] + 1) if k < M and ly[i, k][t1]]
                     if len(l1) > 0:
-                        model.addConstr(len(l1) * ly[i, j][t] + quicksum(keyy for keyy in l1)<= len(l1))
-                    l1 = [lx[i,k] for k in range(j, j + line_constraints[i][t]) if k < M]
+                        model.addConstr(len(l1) * ly[i, j][t] + quicksum(keyy for keyy in l1) <= len(l1))
+                    l1 = [lx[i, k] for k in range(j, j + line_constraints[i][t]) if k < M]
                     if len(l1) > 0:
-                        model.addConstr(line_constraints[i][t] * ly[i,j][t] <= quicksum(keyx for keyx in l1))
+                        model.addConstr(line_constraints[i][t] * ly[i, j][t] <= quicksum(keyx for keyx in l1))
             for t in range(len(column_constraints[j])):
                 if lz[j, i][t]:
                     l1 = []
@@ -78,7 +81,7 @@ def PL(line_constraints, column_constraints, grid, propagation):
                         model.addConstr(len(l1) * lz[j, i][t] + quicksum(keyz for keyz in l1) <= len(l1))
                     l1 = [lx[k, j] for k in range(i, i + column_constraints[j][t]) if k < N]
                     if len(l1) > 0:
-                        model.addConstr(column_constraints[j][t] * lz[j,i][t] <= quicksum(keyx for keyx in l1))
+                        model.addConstr(column_constraints[j][t] * lz[j, i][t] <= quicksum(keyx for keyx in l1))
 
     # Les colonnes
     # Zijt =1 0<=j < M un bloc commence a une seule case
@@ -118,6 +121,8 @@ def ajoute_contraintes(model, grid, line_constraints, column_constraints,
     pré-remplie. Elle evite à l'algorithme de programmation linéaire de
     calculer des contraintes déjà réalisées auparavant.
     """
+    from gurobipy import GRB
+
     cases_resolues = 0
     for i in range(len(line_constraints)):
         for j in range(len(column_constraints)):
@@ -187,8 +192,7 @@ def solve(line_constraints, column_constraints, grid, propagation):
     if propagation:
         grid, temps_dynamique = solve_dynamic(line_constraints, column_constraints, grid)
 
-    grid, temps_lineaire = PL(line_constraints, column_constraints,
-                                grid, propagation)
+    grid, temps_lineaire = PL(line_constraints, column_constraints, grid, propagation)
     return grid, temps_lineaire, temps_dynamique
 
 

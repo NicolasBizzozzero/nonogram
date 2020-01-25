@@ -13,13 +13,15 @@ allows to have the arguments, their documentation and default values to be
 defined in only one location (the `res` folder) for a quicker and easier
 maintenance.
 """
+
+import docopt
+
 import nonogram.src.getters.get_default_value as gdv
 import nonogram.src.getters.get_global_variable as ggv
 import nonogram.src.getters.get_parameter_documentation as gpd
 import nonogram.src.getters.get_parameter_name as gpn
 import nonogram.src.getters.get_entry_point_documentation as gepd
 from nonogram.src.initialization.args_cleaner import clean_arguments
-import docopt
 
 
 _FORMAT_DICTIONARY = dict(

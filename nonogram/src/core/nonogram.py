@@ -1,11 +1,11 @@
 import numpy as np
 
-from solveurs.solveur_utils import SolvingMethod, CASE_VIDE
-from grille.parser import parse_instance
-from grille.affichage import affiche_grille
-import solveurs.dynamic_programming as dp
-import solveurs.linear_programming as lp
-import solveurs.dynamic_optimized_programming as dop
+from nonogram.src.core.solveurs.solveur_utils import SolvingMethod, CASE_VIDE
+from nonogram.src.core.grille.parser import parse_instance
+from nonogram.src.core.grille.affichage import affiche_grille
+import nonogram.src.core.solveurs.dynamic_programming as dp
+import nonogram.src.core.solveurs.linear_programming as lp
+import nonogram.src.core.solveurs.dynamic_optimized_programming as dop
 
 
 def nonogram(file, solving_method, encoding):
