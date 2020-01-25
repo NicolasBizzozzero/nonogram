@@ -32,6 +32,7 @@ setup(
 
     description=ggv.description(),
     long_description=long_description,
+    long_description_content_type="text/markdown",
 
     # The project's main homepage.
     url=ggv.main_homepage(),

@@ -1,4 +1,4 @@
 #/bin/bash
 
 python setup.py sdist bdist_wheel
-~/.local/bin/twine upload dist/*
+twine upload dist/* --verbose
